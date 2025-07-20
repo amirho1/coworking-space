@@ -28,12 +28,10 @@ export default function EmailPhone({
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debounce(() => {
-      onChange(e.target.value);
-      console.log(e.target.value);
-    }, 1000);
-  };
+  const debouncedOnChange = debounce((e: unknown) => {
+    const event = e as React.ChangeEvent<HTMLInputElement>;
+    onChange(event.target.value);
+  });
 
   return (
     <Card className="min-w-sm">
@@ -52,7 +50,7 @@ export default function EmailPhone({
               dir="ltr"
               name="email"
               defaultValue={value}
-              onChange={handleChange}
+              onChange={debouncedOnChange}
             />
           </div>
           <Button type="submit" className="w-full">
