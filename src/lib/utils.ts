@@ -23,7 +23,7 @@ export function validatePhone(phone: string) {
   return /^09\d{9}$/.test(phone);
 }
 
-export function debounce(func: (...args: unknown[]) => void, delay: number) {
+export function debounce(func: (...args: unknown[]) => unknown, delay: number = 1000) {
   let timeoutId: NodeJS.Timeout | null = null;
   return (...args: unknown[]) => {
     clearTimeout(timeoutId as NodeJS.Timeout);
