@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { Step } from "./Index";
 
-export default function OTPForm({ setStep }: { setStep: (step: "emailPhone" | "otp") => void }) {
+export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) {
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +42,7 @@ export default function OTPForm({ setStep }: { setStep: (step: "emailPhone" | "o
 
       // Reset form after successful submission
       setOtp("");
-      setStep("otp");
+      setStep("form");
     } catch (error) {
       toast.error("تایید کد ناموفق بود. لطفاً دوباره تلاش کنید.");
     } finally {
@@ -81,7 +82,13 @@ export default function OTPForm({ setStep }: { setStep: (step: "emailPhone" | "o
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex justify-center" dir="ltr">
-            <InputOTP maxLength={6} value={otp} onChange={handleOtpChange} disabled={isLoading}>
+            <InputOTP
+              maxLength={6}
+              value={otp}
+              onChange={handleOtpChange}
+              disabled={isLoading}
+              autoFocus
+            >
               <InputOTPGroup>
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
@@ -132,7 +139,11 @@ export default function OTPForm({ setStep }: { setStep: (step: "emailPhone" | "o
           </div>
 
           <div className="text-center">
-            <Button variant="link" className="text-sm text-gray-600" onClick={() => setStep("emailPhone")}>
+            <Button
+              variant="link"
+              className="text-sm text-gray-600"
+              onClick={() => setStep("emailPhone")}
+            >
               تغییر شماره تلفن
             </Button>
           </div>
