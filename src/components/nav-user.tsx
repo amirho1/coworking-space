@@ -79,8 +79,10 @@ export function NavUser({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <CreditCardIcon />
-                صورتحساب
+                <Link href={routes.invoices} className="flex items-center gap-2">
+                  <CreditCardIcon />
+                  صورتحساب
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

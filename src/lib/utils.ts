@@ -12,6 +12,7 @@ export const routes = {
   dashboard: "/dashboard",
   settings: "/settings",
   profile: "/dashboard/profile",
+  invoices: "/dashboard/invoices",
 };
 
 export function validateEmail(email: string) {

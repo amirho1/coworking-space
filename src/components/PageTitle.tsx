@@ -5,6 +5,8 @@ import React from "react";
 const titles = {
   dashboard: "داشبورد",
   "meeting-rooms": "اتاق جلسات",
+  services: "سرویس ها",
+  invoices: "صورتحساب ها",
 };
 
 export default function PageTitle() {

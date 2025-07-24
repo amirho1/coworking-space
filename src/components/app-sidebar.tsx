@@ -25,13 +25,21 @@ const data = {
       name: "داشبورد",
       href: "/dashboard",
       icon: Home,
-      current: true,
     },
     {
       name: "اتاق‌های جلسه",
       href: "/dashboard/meeting-rooms",
       icon: Building2,
-      current: false,
+    },
+    {
+      name: "سرویس ها",
+      href: "/dashboard/services",
+      icon: Building2,
+    },
+    {
+      name: "صورتحساب ها",
+      href: "/dashboard/invoices",
+      icon: Building2,
     },
   ],
 };
