@@ -71,8 +71,8 @@ export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) 
   };
 
   return (
-    <div className=" flex items-center justify-center">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center h-screen">
+      <Card className="min-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">ورود کد تایید</CardTitle>
           <CardDescription>
