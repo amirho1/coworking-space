@@ -1,4 +1,3 @@
-import DashboardLayout from "@/components/dashboard/dashboard-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,6 @@ import {
   Clock,
   Users,
   Building2,
-  Plus,
   TrendingUp,
   CheckCircle,
   AlertCircle,
@@ -85,88 +83,81 @@ export default function DashboardPage() {
   };
 
   return (
-    <DashboardLayout user={user}>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">داشبورد</h1>
-            <p className="text-muted-foreground">
-              خوش آمدید! اینجا آنچه امروز با جلسات شما اتفاق می‌افتد را می‌بینید.
-            </p>
-          </div>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            جلسه جدید
-          </Button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-muted-foreground">
+            خوش آمدید! اینجا آنچه امروز با جلسات شما اتفاق می‌افتد را می‌بینید.
+          </p>
         </div>
-
-        {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map(stat => (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                <stat.icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{stat.description}</p>
-                <div className="flex items-center mt-2">
-                  {stat.trendUp ? (
-                    <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-                  ) : (
-                    <TrendingUp className="h-3 w-3 text-red-500 mr-1 rotate-180" />
-                  )}
-                  <span className="text-xs text-muted-foreground">
-                    {stat.trend} نسبت به ماه گذشته
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Upcoming Meetings */}
-        <Card>
-          <CardHeader>
-            <CardTitle>جلسات آینده</CardTitle>
-            <CardDescription>3 جلسه برنامه‌ریزی شده بعدی شما</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {upcomingMeetings.map(meeting => (
-                <div
-                  key={meeting.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                      {meeting.status === "confirmed" ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <AlertCircle className="h-4 w-4 text-yellow-500" />
-                      )}
-                      <Badge variant={meeting.status === "confirmed" ? "default" : "secondary"}>
-                        {meeting.status === "confirmed" ? "تأیید شده" : "در انتظار"}
-                      </Badge>
-                    </div>
-                    <div>
-                      <h4 className="font-medium">{meeting.title}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {meeting.time} • {meeting.room} • {meeting.attendees} شرکت‌کننده
-                      </p>
-                    </div>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    پیوستن
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </DashboardLayout>
+
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map(stat => (
+          <Card key={stat.title}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <stat.icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <p className="text-xs text-muted-foreground">{stat.description}</p>
+              <div className="flex items-center mt-2">
+                {stat.trendUp ? (
+                  <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
+                ) : (
+                  <TrendingUp className="h-3 w-3 text-red-500 mr-1 rotate-180" />
+                )}
+                <span className="text-xs text-muted-foreground">
+                  {stat.trend} نسبت به ماه گذشته
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Upcoming Meetings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>جلسات آینده</CardTitle>
+          <CardDescription>3 جلسه برنامه‌ریزی شده بعدی شما</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {upcomingMeetings.map(meeting => (
+              <div
+                key={meeting.id}
+                className="flex items-center justify-between p-4 border rounded-lg"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    {meeting.status === "confirmed" ? (
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-4 w-4 text-yellow-500" />
+                    )}
+                    <Badge variant={meeting.status === "confirmed" ? "default" : "secondary"}>
+                      {meeting.status === "confirmed" ? "تأیید شده" : "در انتظار"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <h4 className="font-medium">{meeting.title}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {meeting.time} • {meeting.room} • {meeting.attendees} شرکت‌کننده
+                    </p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm">
+                  پیوستن
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

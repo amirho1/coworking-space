@@ -1,4 +1,6 @@
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata = {
   title: "پنل رزرو اتاق جلیسات",
@@ -14,13 +16,15 @@ interface DashboardLayoutProps {
   };
 }
 
-export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar user={user} />
-      <main className="flex-1 overflow-auto">
-        <div className="mx-auto p-6">{children}</div>
-      </main>
-    </div>
+    <SidebarProvider>
+      <AppSidebar variant="inset" side="right" />
+
+      <SidebarInset>
+        <SiteHeader />
+        <div className="p-5">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
