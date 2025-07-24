@@ -30,3 +30,5 @@ export function debounce(func: (...args: unknown[]) => unknown, delay: number = 
     timeoutId = setTimeout(() => func(...args), delay);
   };
 }
+
+export const authRoutes = [routes.login, routes.register];
