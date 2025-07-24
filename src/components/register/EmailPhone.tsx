@@ -1,37 +1,65 @@
 "use client";
-import { debounce, validateEmail, validatePhone } from "@/lib/utils";
+import { validateEmail, validatePhone } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { startTransition, useActionState, useEffect } from "react";
+import { otp } from "@/app/login/actions";
 import { toast } from "sonner";
+
+const schema = z.object({
+  emailOrPhone: z
+    .string()
+    .refine(validateEmail, { message: "ایمیل معتبر نیست" })
+    .or(z.string().refine(validatePhone, { message: "موبایل معتبر نیست" })),
+});
 
 export default function EmailPhone({
   setStep,
   onChange,
   value,
+  setDatetime,
 }: {
   setStep: (step: "emailPhone" | "otp") => void;
   onChange: (value: string) => void;
+  setDatetime: (datetime: number | undefined) => void;
   value: string;
 }) {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get("email") as string;
-    if (validateEmail(email)) {
-      setStep("otp");
-    } else if (validatePhone(email)) {
-      setStep("otp");
-    } else {
-      toast.error("ایمیل یا موبایل معتبر نیست");
-    }
+  const [{ datetime, success, error }, formAction, isPending] = useActionState(otp, {
+    error: null,
+    success: false,
+    datetime: undefined,
+  });
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      emailOrPhone: "",
+    },
+    mode: "onSubmit",
+  });
+
+  const handleSubmit = (data: z.infer<typeof schema>) => {
+    const formData = new FormData();
+    formData.append("emailOrPhone", data.emailOrPhone);
+    startTransition(() => {
+      formAction(formData);
+      onChange(formData.get("emailOrPhone") as string);
+    });
   };
 
-  const debouncedOnChange = debounce((e: unknown) => {
-    const event = e as React.ChangeEvent<HTMLInputElement>;
-    onChange(event.target.value);
-  });
+  useEffect(() => {
+    if (success && datetime) {
+      setStep("otp");
+      setDatetime(datetime);
+      toast.success("کد ارسال شد");
+    } else if (error) {
+      toast.error("خطایی در ارسال کد رخ داده است");
+    }
+  }, [success, error]);
 
   return (
     <Card className="min-w-sm">
@@ -41,22 +69,32 @@ export default function EmailPhone({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-          <div className="grid gap-2">
-            <Label htmlFor="email">ایمیل یا موبایل</Label>
-            <Input
-              id="email"
-              placeholder="example@example.com  /  09034532987"
-              dir="ltr"
-              name="email"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="emailOrPhone"
               defaultValue={value}
-              onChange={debouncedOnChange}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ایمیل یا موبایل</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...form.register("emailOrPhone")}
+                      placeholder="example@example.com  /  09034532987"
+                      dir="ltr"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <Button type="submit" className="w-full">
-            ادامه
-          </Button>
-        </form>
+            <Button type="submit" className="w-full mt-4" disabled={isPending}>
+              {isPending ? "در حال ارسال..." : "ادامه"}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
