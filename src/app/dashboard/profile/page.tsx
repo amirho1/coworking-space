@@ -4,9 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default async function Account() {
+export default async function Profile() {
   return (
-    <form>
+    <div>
       <Card className="mx-auto overflow-hidden rounded-xl shadow-none p-0 border-none">
         {/* Banner */}
         <div className="relative h-32 bg-gradient-to-r from-[#000] via-[#0008] to-[#0006]">
@@ -38,6 +38,6 @@ export default async function Account() {
           <PasswordForm />
         </TabsContent>
       </Tabs>
-    </form>
+    </div>
   );
 }

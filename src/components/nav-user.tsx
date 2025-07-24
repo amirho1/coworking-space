@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  CreditCardIcon,
-  LogOutIcon,
-  MoreVerticalIcon,
-  UserCircleIcon,
-} from "lucide-react";
+import { CreditCardIcon, LogOutIcon, MoreVerticalIcon, UserCircleIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -38,7 +33,7 @@ export function NavUser({
   const { isMobile } = useSidebar();
 
   return (
-    <SidebarMenu >
+    <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu dir="rtl">
           <DropdownMenuTrigger asChild>
@@ -78,7 +73,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link href={routes.account} className="flex items-center gap-2">
+                <Link href={routes.profile} className="flex items-center gap-2">
                   <UserCircleIcon />
                   حساب کاربری
                 </Link>

@@ -10,9 +10,8 @@ export const routes = {
   login: "/login",
   register: "/register",
   dashboard: "/dashboard",
-  profile: "/profile",
   settings: "/settings",
-  account: "/dashboard/account",
+  profile: "/dashboard/profile",
 };
 
 export function validateEmail(email: string) {
