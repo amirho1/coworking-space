@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./ui/pagination";
+import { Button } from "./ui/button";
 
 type PaginationComponentProps = {
   totalPages: number;
@@ -20,7 +21,7 @@ interface NumbersProps {
 }
 
 function Numbers({ beforeAfterCount = 2, currentPage, totalPages }: NumbersProps) {
-  const from = currentPage - beforeAfterCount >= 0 ? currentPage - beforeAfterCount : 1;
+  const from = currentPage - beforeAfterCount > 0 ? currentPage - beforeAfterCount : 1;
   const to =
     currentPage + beforeAfterCount <= totalPages ? currentPage + beforeAfterCount : totalPages;
 
@@ -44,13 +45,21 @@ export function PaginationComponent({ totalPages, currentPage }: PaginationCompo
     <Pagination className="mt-6">
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href={`${routes.invoices}?page=${currentPage - 1}`} />
+          <Button disabled={currentPage === 1} variant="outline">
+            <PaginationPrevious
+              href={`${routes.invoices}?page=${currentPage - 1}`}
+            />
+          </Button>
         </PaginationItem>
 
         <Numbers currentPage={currentPage} totalPages={totalPages} />
 
         <PaginationItem>
-          <PaginationNext href={`${routes.invoices}?page=${currentPage + 1}`} />
+          <Button disabled={currentPage === totalPages} variant="outline">
+            <PaginationNext
+              href={`${routes.invoices}?page=${currentPage + 1}`}
+            />
+          </Button>
         </PaginationItem>
       </PaginationContent>
     </Pagination>
