@@ -15,6 +15,11 @@ export const routes = {
   invoices: "/dashboard/invoices",
 };
 
+export const frontRoutes = {
+  otpConfirm: "/api/otp-confirm",
+  
+}
+
 export function validateEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }

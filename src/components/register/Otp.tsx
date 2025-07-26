@@ -8,15 +8,26 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Step } from "./Index";
 
-export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) {
+import axiosFront from "@/api/front";
+import { frontRoutes } from "@/lib/utils";
+import useTimer from "@/hooks/useTimer";
+
+interface OtpProps {
+  setStep: (step: Step) => void;
+  datetime: number;
+  username: string;
+}
+
+export default function OTPForm({ setStep, datetime, username }: OtpProps) {
   const [otp, setOtp] = useState("");
+  const { minutes, seconds, time } = useTimer({ datetime, waitTime: 120000 });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOtpChange = (value: string) => {
     setOtp(value);
 
     // Auto-submit when all 6 digits are entered
-    if (value.length === 6) {
+    if (value.length === 6 && time > 0) {
       handleSubmit(value);
     }
   };
@@ -33,10 +44,8 @@ export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) 
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Here you would typically verify the OTP with your backend
-      console.log("Submitting OTP:", otpValue);
+      // await new Promise(resolve => setTimeout(resolve, 2000));
+      await axiosFront.post(frontRoutes.otpConfirm, { username, code: otpValue });
 
       toast.success("کد با موفقیت تایید شد");
 
@@ -44,6 +53,7 @@ export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) 
       setOtp("");
       setStep("form");
     } catch (error) {
+      console.log(error);
       toast.error("تایید کد ناموفق بود. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
@@ -102,14 +112,16 @@ export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) 
 
           <div className="text-center text-sm text-gray-600">
             <p>کد ۶ رقمی ارسال شده به شماره خود را وارد کنید</p>
-            <p className="mt-1">کد تا ۵ دقیقه معتبر است</p>
+            <p className="mt-1">
+              کد تا {minutes}:{seconds.toString().padStart(2, "0")} دقیقه معتبر است
+            </p>
           </div>
 
           <div className="space-y-3">
             <Button
               onClick={() => handleSubmit()}
               className="w-full"
-              disabled={otp.length !== 6 || isLoading}
+              disabled={otp.length !== 6 || isLoading || time <= 0}
             >
               {isLoading ? (
                 <>
@@ -125,7 +137,7 @@ export default function OTPForm({ setStep }: { setStep: (step: Step) => void }) 
               variant="outline"
               onClick={handleResendOtp}
               className="w-full bg-transparent"
-              disabled={isLoading}
+              disabled={isLoading || !(time <= 0)}
             >
               {isLoading ? (
                 <>
