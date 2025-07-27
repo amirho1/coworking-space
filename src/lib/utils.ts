@@ -17,8 +17,8 @@ export const routes = {
 
 export const frontRoutes = {
   otpConfirm: "/api/otp-confirm",
-  
-}
+  register: "/api/register",
+};
 
 export function validateEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
