@@ -37,7 +37,7 @@ export default function EmailPhone({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      emailOrPhone: "",
+      emailOrPhone: value,
     },
     mode: "onSubmit",
   });
@@ -74,7 +74,6 @@ export default function EmailPhone({
             <FormField
               control={form.control}
               name="emailOrPhone"
-              defaultValue={value}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>ایمیل یا موبایل</FormLabel>

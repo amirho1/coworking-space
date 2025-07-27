@@ -73,7 +73,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
 
       // Clear current OTP
       setOtp("");
-    } catch (error) {
+    } catch (_: unknown) {
       toast.error("ارسال مجدد کد ناموفق بود. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
