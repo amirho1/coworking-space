@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 import axiosFront from "@/api/front";
 import { frontRoutes, routes, validatePhone } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -96,7 +96,7 @@ export default function LoginForm() {
 
                 <Button type="submit" className="w-full" disabled={loading}>
                   ورود
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {loading && <Icon icon="mdi:loading" className="mr-2 h-4 w-4 animate-spin" />}
                 </Button>
               </div>
 

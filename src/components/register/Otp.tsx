@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Step } from "./Index";
 
 import axiosFront from "@/api/front";
 import { frontRoutes } from "@/lib/utils";
 import useTimer from "@/hooks/useTimer";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface OtpProps {
   setStep: (step: Step) => void;
@@ -124,7 +124,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Icon icon="mdi:loading" className="mr-2 h-4 w-4 animate-spin" />
                   در حال بررسی...
                 </>
               ) : (
@@ -140,7 +140,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Icon icon="mdi:loading" className="mr-2 h-4 w-4 animate-spin" />
                   در حال ارسال...
                 </>
               ) : (

@@ -1,15 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  Clock,
-  Users,
-  Building2,
-  TrendingUp,
-  CheckCircle,
-  AlertCircle,
-} from "lucide-react";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 // Mock data - replace with real data from your backend
 const stats = [
@@ -17,7 +9,7 @@ const stats = [
     title: "کل جلسات",
     value: "24",
     description: "این ماه",
-    icon: Calendar,
+    icon: "mdi:calendar",
     trend: "+12%",
     trendUp: true,
   },
@@ -25,7 +17,7 @@ const stats = [
     title: "ساعت‌های رزرو شده",
     value: "156",
     description: "این ماه",
-    icon: Clock,
+    icon: "mdi:clock",
     trend: "+8%",
     trendUp: true,
   },
@@ -33,7 +25,7 @@ const stats = [
     title: "اعضای تیم",
     value: "12",
     description: "کاربران فعال",
-    icon: Users,
+    icon: "mdi:users",
     trend: "+2",
     trendUp: true,
   },
@@ -41,7 +33,7 @@ const stats = [
     title: "اتاق‌های موجود",
     value: "8",
     description: "آماده رزرو",
-    icon: Building2,
+    icon: "mdi:building-2",
     trend: "100%",
     trendUp: true,
   },
@@ -99,16 +91,16 @@ export default function DashboardPage() {
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
+              <Icon icon={stat.icon} className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
               <p className="text-xs text-muted-foreground">{stat.description}</p>
               <div className="flex items-center mt-2">
                 {stat.trendUp ? (
-                  <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
+                  <Icon icon="mdi:trending-up" className="h-3 w-3 text-green-500 mr-1" />
                 ) : (
-                  <TrendingUp className="h-3 w-3 text-red-500 mr-1 rotate-180" />
+                  <Icon icon="mdi:trending-down" className="h-3 w-3 text-red-500 mr-1 rotate-180" />
                 )}
                 <span className="text-xs text-muted-foreground">
                   {stat.trend} نسبت به ماه گذشته
@@ -135,9 +127,9 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
                     {meeting.status === "confirmed" ? (
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <Icon icon="mdi:check-circle" className="h-4 w-4 text-green-500" />
                     ) : (
-                      <AlertCircle className="h-4 w-4 text-yellow-500" />
+                      <Icon icon="mdi:alert-circle" className="h-4 w-4 text-yellow-500" />
                     )}
                     <Badge variant={meeting.status === "confirmed" ? "default" : "secondary"}>
                       {meeting.status === "confirmed" ? "تأیید شده" : "در انتظار"}

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { MapPin } from "lucide-react";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -37,7 +37,7 @@ export default function RoomCard({ room }: { room: any }) {
           <div>
             <CardTitle className="text-lg">{room.name}</CardTitle>
             <CardDescription className="flex items-center mt-1">
-              <MapPin className="h-3 w-3 mr-1" />
+              <Icon icon="mdi:map-marker" className="h-3 w-3 mr-1" />
               {room.location}
             </CardDescription>
           </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Building2, Home } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -24,22 +23,22 @@ const data = {
     {
       name: "داشبورد",
       href: "/dashboard",
-      icon: Home,
+      icon: "mdi:home",
     },
     {
       name: "اتاق‌های جلسه",
       href: "/dashboard/meeting-rooms",
-      icon: Building2,
+      icon: "mdi:virtual-meeting",
     },
     {
       name: "سرویس ها",
       href: "/dashboard/services",
-      icon: Building2,
+      icon: "mdi:seat",
     },
     {
       name: "صورتحساب ها",
       href: "/dashboard/invoices",
-      icon: Building2,
+      icon: "mdi:invoice",
     },
   ],
 };

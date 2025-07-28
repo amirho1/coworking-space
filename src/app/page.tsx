@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wifi, Coffee, Users, Clock, MapPin, Phone, Mail, Shield, Zap } from "lucide-react";
 import { routes } from "@/lib/utils";
+import { Icon } from "@iconify/react";
 
 export default function HomePage() {
   return (
@@ -67,7 +67,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <Wifi className="h-12 w-12 text-blue-600 mb-4" />
+                <Icon icon="mdi:wifi" className="h-12 w-12 text-blue-600 mb-4" />
                 <CardTitle>اینترنت پرسرعت</CardTitle>
                 <CardDescription>اتصال فیبر نوری با سرعت بالا و پایداری ۹۹.۹٪</CardDescription>
               </CardHeader>
@@ -75,7 +75,7 @@ export default function HomePage() {
 
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <Users className="h-12 w-12 text-blue-600 mb-4" />
+                <Icon icon="mdi:users" className="h-12 w-12 text-blue-600 mb-4" />
                 <CardTitle>اتاق‌های جلسه</CardTitle>
                 <CardDescription>اتاق‌های مجهز با تجهیزات ارائه و ویدئو کنفرانس</CardDescription>
               </CardHeader>
@@ -83,7 +83,7 @@ export default function HomePage() {
 
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <Coffee className="h-12 w-12 text-blue-600 mb-4" />
+                <Icon icon="mdi:coffee" className="h-12 w-12 text-blue-600 mb-4" />
                 <CardTitle>کافه و آشپزخانه</CardTitle>
                 <CardDescription>قهوه تازه، چای و تنقلات رایگان در تمام ساعات کاری</CardDescription>
               </CardHeader>
@@ -91,7 +91,7 @@ export default function HomePage() {
 
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <Clock className="h-12 w-12 text-blue-600 mb-4" />
+                <Icon icon="mdi:clock" className="h-12 w-12 text-blue-600 mb-4" />
                 <CardTitle>دسترسی ۲۴/۷</CardTitle>
                 <CardDescription>
                   امکان کار در تمام ساعات شبانه‌روز با سیستم امنیتی پیشرفته
@@ -101,7 +101,7 @@ export default function HomePage() {
 
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <Shield className="h-12 w-12 text-blue-600 mb-4" />
+                <Icon icon="mdi:shield" className="h-12 w-12 text-blue-600 mb-4" />
                 <CardTitle>امنیت بالا</CardTitle>
                 <CardDescription>
                   سیستم کنترل تردد، دوربین مداربسته و نگهبانی ۲۴ ساعته
@@ -111,7 +111,7 @@ export default function HomePage() {
 
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <Zap className="h-12 w-12 text-blue-600 mb-4" />
+                <Icon icon="mdi:zap" className="h-12 w-12 text-blue-600 mb-4" />
                 <CardTitle>فضای انعطاف‌پذیر</CardTitle>
                 <CardDescription>میز‌های قابل تنظیم، فضای کار باز و اتاق‌های خصوصی</CardDescription>
               </CardHeader>
@@ -274,7 +274,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="text-center">
               <CardHeader>
-                <MapPin className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Icon icon="mdi:map-marker" className="h-12 w-12 text-blue-600 mx-auto mb-4" />
                 <CardTitle>آدرس</CardTitle>
                 <CardDescription>
                   تهران، خیابان ولیعصر، پلاک ۱۲۳۴
@@ -286,7 +286,7 @@ export default function HomePage() {
 
             <Card className="text-center">
               <CardHeader>
-                <Phone className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Icon icon="mdi:phone" className="h-12 w-12 text-blue-600 mx-auto mb-4" />
                 <CardTitle>تلفن</CardTitle>
                 <CardDescription>
                   ۰۲۱-۱۲۳۴۵۶۷۸
@@ -298,7 +298,7 @@ export default function HomePage() {
 
             <Card className="text-center">
               <CardHeader>
-                <Mail className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Icon icon="mdi:email" className="h-12 w-12 text-blue-600 mx-auto mb-4" />
                 <CardTitle>ایمیل</CardTitle>
                 <CardDescription>
                   info@diginext.ir

@@ -1,7 +1,5 @@
 "use client";
 
-import { CreditCardIcon, LogOutIcon, MoreVerticalIcon, UserCircleIcon } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -20,6 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { routes } from "@/lib/utils";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export function NavUser({
   user,
@@ -49,7 +48,7 @@ export function NavUser({
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs text-muted-foreground">{user.email}</span>
               </div>
-              <MoreVerticalIcon className="ml-auto size-4" />
+              <Icon icon="mdi:dots-vertical" className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -74,20 +73,20 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Link href={routes.profile} className="flex items-center gap-2">
-                  <UserCircleIcon />
+                  <Icon icon="mdi:user" />
                   حساب کاربری
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link href={routes.invoices} className="flex items-center gap-2">
-                  <CreditCardIcon />
+                  <Icon icon="mdi:credit-card" />
                   صورتحساب
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500 hover:text-red-500">
-              <LogOutIcon color="red" />
+              <Icon icon="mdi:logout" />
               خروج
             </DropdownMenuItem>
           </DropdownMenuContent>

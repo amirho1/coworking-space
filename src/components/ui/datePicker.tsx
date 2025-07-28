@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/Calendar";
@@ -15,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 function formatDate(date: Date | undefined) {
   if (!date) {
@@ -52,7 +52,7 @@ function CustomMonthsDropdown(props: any) {
       <DropdownMenuTrigger asChild className="z-50">
         <Button variant="outline">
           {persianMonths[props.value]}
-          <ChevronDownIcon className="size-4" />
+          <Icon icon="mdi:chevron-down" className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -125,7 +125,7 @@ export function DatePicker({
               variant="ghost"
               className="absolute top-1/2 left-2 size-6 -translate-y-1/2"
             >
-              <CalendarIcon className="size-3.5" />
+              <Icon icon="mdi:calendar" className="size-3.5" />
               <span className="sr-only">Select date</span>
             </Button>
           </PopoverTrigger>
