@@ -52,8 +52,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
       // Reset form after successful submission
       setOtp("");
       setStep("form");
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
       toast.error("تایید کد ناموفق بود. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
@@ -73,7 +72,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
 
       // Clear current OTP
       setOtp("");
-    } catch (_: unknown) {
+    } catch (error: unknown) {
       toast.error("ارسال مجدد کد ناموفق بود. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
