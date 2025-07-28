@@ -13,11 +13,13 @@ export const routes = {
   settings: "/settings",
   profile: "/dashboard/profile",
   invoices: "/dashboard/invoices",
+  forgotPassword: "/auth/forgot-password",
 };
 
 export const frontRoutes = {
   otpConfirm: "/api/otp-confirm",
   register: "/api/register",
+  login: "/api/login",
 };
 
 export function validateEmail(email: string) {
