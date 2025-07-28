@@ -26,6 +26,6 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">{components[step]}</div>
+    <div className="sm:flex flex-col items-center justify-center h-screen">{components[step]}</div>
   );
 }
