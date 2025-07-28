@@ -17,12 +17,13 @@ import { DatePicker } from "../ui/datePicker";
 import axiosFront from "@/api/front";
 import { frontRoutes } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 const imageFormats = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
 
 export default function RegisterForm({ email = "", phone = "" }: { email: string; phone: string }) {
   const router = useRouter();
-
+  const firstInputRef = useRef<HTMLInputElement>(null);
   const schema = z
     .object({
       name: z.string().min(3, { message: "نام باید حداقل 3 کاراکتر باشد" }),
@@ -84,6 +85,7 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
       label: "نام",
       placeholder: "نام",
       type: "text",
+      ref: firstInputRef,
     },
     {
       name: "lastname",
@@ -133,25 +135,30 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
       label: "کارت ملی",
       placeholder: "کارت ملی",
       type: "file",
-      col: 2,
     },
   ];
 
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
   return (
-    <Card className="w-full max-w-md p-3 gap-2">
+    <Card className="md:w-xl p-3 gap-2">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">ثبت نام</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid  xs:grid-cols-1  gap-2">
-              {fields.map(({ name, label, placeholder, type, col }) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {fields.map(({ name, label, placeholder, type, ref }) => (
                 <FormField
                   key={name}
                   name={name}
                   render={({ field }) => (
-                    <FormItem className={col ? "col-span-2" : ""}>
+                    <FormItem>
                       <FormLabel>{label}</FormLabel>
                       <FormControl>
                         {type === "file" ? (
@@ -166,7 +173,15 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
                         ) : type === "date" ? (
                           <DatePicker field={field} />
                         ) : (
-                          <Input placeholder={placeholder} {...field} type={type} />
+                          <Input
+                            placeholder={placeholder}
+                            {...field}
+                            type={type}
+                            ref={e => {
+                              field.ref(e);
+                              if (ref) ref.current = e;
+                            }}
+                          />
                         )}
                       </FormControl>
                       <FormDescription />
@@ -176,7 +191,7 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
                 />
               ))}
             </div>
-            <Button type="submit" className="w-full ">
+            <Button type="submit" className="w-full mt-2">
               ثبت نام
             </Button>
           </form>
