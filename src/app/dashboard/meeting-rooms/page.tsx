@@ -64,32 +64,6 @@ const meetingRooms = [
   },
 ];
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "available":
-      return "bg-green-100 text-green-800";
-    case "occupied":
-      return "bg-red-100 text-red-800";
-    case "maintenance":
-      return "bg-yellow-100 text-yellow-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
-
-const getStatusText = (status: string) => {
-  switch (status) {
-    case "available":
-      return "موجود";
-    case "occupied":
-      return "اشغال شده";
-    case "maintenance":
-      return "تعمیرات";
-    default:
-      return "نامشخص";
-  }
-};
-
 export default function MeetingRoomsPage() {
   return (
     <div className="space-y-6">

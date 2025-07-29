@@ -14,6 +14,7 @@ export const routes = {
   profile: "/dashboard/profile",
   invoices: "/dashboard/invoices",
   forgotPassword: "/auth/forgot-password",
+  meetingRooms: "/dashboard/meeting-rooms",
 };
 
 export const frontRoutes = {
@@ -39,3 +40,15 @@ export function debounce(func: (...args: unknown[]) => unknown, delay: number = 
 }
 
 export const authRoutes = [routes.login, routes.register];
+
+export const persianWeekDays = [
+  "ساعت",
+  "شنبه",
+  "یکشنبه",
+  "دوشنبه",
+  "سه‌شنبه",
+  "چهارشنبه",
+  "پنجشنبه",
+  "جمعه",
+];
+

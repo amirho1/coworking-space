@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Link from "next/link";
+import { routes } from "@/lib/utils";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -68,11 +70,11 @@ export default function RoomCard({ room }: { room: any }) {
           </div>
         </div>
 
-        <div className="flex space-x-2 pt-2">
-          <Button size="sm" className="flex-1" disabled={room.status !== "available"}>
+        <Button className="w-full" disabled={room.status !== "available"}>
+          <Link href={`${routes.meetingRooms}/${room.id}`} className="w-full">
             رزرو
-          </Button>
-        </div>
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );
