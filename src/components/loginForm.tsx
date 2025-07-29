@@ -36,7 +36,7 @@ export default function LoginForm() {
     axiosFront
       .post(frontRoutes.login, data)
       .then(() => {
-        router.push(routes.dashboard);
+        router.push(routes.services);
       })
       .catch(err => {
         console.error(err);

@@ -21,20 +21,16 @@ const data = {
   },
   navMain: [
     {
-      name: "داشبورد",
-      href: "/dashboard",
-      icon: "mdi:home",
+      name: "سرویس ها",
+      href: "/dashboard/services",
+      icon: "mdi:seat",
     },
     {
       name: "اتاق‌های جلسه",
       href: "/dashboard/meeting-rooms",
       icon: "mdi:virtual-meeting",
     },
-    {
-      name: "سرویس ها",
-      href: "/dashboard/services",
-      icon: "mdi:seat",
-    },
+
     {
       name: "صورتحساب ها",
       href: "/dashboard/invoices",

@@ -18,6 +18,7 @@ const mockData = [
     amount: 100000,
     status: "paid",
     date: "2021-01-01",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ const mockData = [
     amount: 200000,
     status: "unpaid",
     date: "2021-01-02",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 3,
@@ -32,6 +34,7 @@ const mockData = [
     amount: 300000,
     status: "paid",
     date: "2021-01-03",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 4,
@@ -39,6 +42,7 @@ const mockData = [
     amount: 400000,
     status: "unpaid",
     date: "2021-01-04",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 5,
@@ -46,6 +50,7 @@ const mockData = [
     amount: 500000,
     status: "paid",
     date: "2021-01-05",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 6,
@@ -53,6 +58,7 @@ const mockData = [
     amount: 600000,
     status: "unpaid",
     date: "2021-01-06",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 7,
@@ -60,6 +66,7 @@ const mockData = [
     amount: 700000,
     status: "paid",
     date: "2021-01-07",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 8,
@@ -67,6 +74,7 @@ const mockData = [
     amount: 800000,
     status: "unpaid",
     date: "2021-01-08",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 9,
@@ -74,6 +82,7 @@ const mockData = [
     amount: 900000,
     status: "paid",
     date: "2021-01-09",
+    details: 'شرح صورتحساب 1',
   },
   {
     id: 10,
@@ -81,6 +90,7 @@ const mockData = [
     amount: 1000000,
     status: "unpaid",
     date: "2021-01-10",
+    details: 'شرح صورتحساب 1',
   },
 ];
 
@@ -99,6 +109,7 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
           <TableRow className="[&>th]:text-right">
             <TableHead>شناسه</TableHead>
             <TableHead>عنوان</TableHead>
+            <TableHead>شرح صورت حساب</TableHead>
             <TableHead>مبلغ</TableHead>
             <TableHead>وضعیت</TableHead>
             <TableHead>تاریخ</TableHead>
@@ -110,6 +121,7 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>{item.title}</TableCell>
+              <TableCell>{item.details}</TableCell>
               <TableCell>{item.amount}</TableCell>
               <TableCell>
                 <Badge className={cn(item.status === "paid" ? "bg-green-500" : "bg-red-500")}>
