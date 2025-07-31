@@ -13,8 +13,13 @@ export const routes = {
   settings: "/settings",
   profile: "/dashboard/profile",
   invoices: "/dashboard/invoices",
+  services: "/dashboard/services",
   forgotPassword: "/auth/forgot-password",
   meetingRooms: "/dashboard/meeting-rooms",
+  users: "/dashboard/users",
+  userDetails: (id: number) => `/dashboard/users/${id}`,
+  userMeetingRooms: (id: number) => `/dashboard/users/meeting-rooms/${id}`,
+  userServices: (id: number) => `/dashboard/users/services/${id}`,
 };
 
 export const frontRoutes = {
@@ -31,10 +36,12 @@ export function validatePhone(phone: string) {
   return /^09\d{9}$/.test(phone);
 }
 
-export function debounce(func: (...args: unknown[]) => unknown, delay: number = 1000) {
+export function debounce(func: (...args: any[]) => any, delay: number = 1000) {
   let timeoutId: NodeJS.Timeout | null = null;
-  return (...args: unknown[]) => {
-    clearTimeout(timeoutId as NodeJS.Timeout);
+
+  return (...args: any[]) => {
+    if (timeoutId) clearTimeout(timeoutId);
+
     timeoutId = setTimeout(() => func(...args), delay);
   };
 }
@@ -51,4 +58,3 @@ export const persianWeekDays = [
   "پنجشنبه",
   "جمعه",
 ];
-
