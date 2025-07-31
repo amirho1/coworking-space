@@ -12,6 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { routes } from "@/lib/utils";
 
 const data = {
   user: {
@@ -22,19 +23,25 @@ const data = {
   navMain: [
     {
       name: "سرویس ها",
-      href: "/dashboard/services",
+      href: routes.services,
       icon: "mdi:seat",
     },
     {
       name: "اتاق‌های جلسه",
-      href: "/dashboard/meeting-rooms",
+      href: routes.meetingRooms,
       icon: "mdi:virtual-meeting",
     },
 
     {
       name: "صورتحساب ها",
-      href: "/dashboard/invoices",
+      href: routes.invoices,
       icon: "mdi:invoice",
+    },
+
+    {
+      name: "لیست کاربران",
+      href: routes.users,
+      icon: "mdi:users",
     },
   ],
 };
