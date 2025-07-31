@@ -1,4 +1,3 @@
-import { routes } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
@@ -12,15 +11,17 @@ import { Button } from "./ui/button";
 type PaginationComponentProps = {
   totalPages: number;
   currentPage: number;
+  url: string;
 };
 
 interface NumbersProps {
   currentPage: number;
   totalPages: number;
   beforeAfterCount?: number;
+  url: string;
 }
 
-function Numbers({ beforeAfterCount = 2, currentPage, totalPages }: NumbersProps) {
+function Numbers({ beforeAfterCount = 2, currentPage, totalPages, url }: NumbersProps) {
   const from = currentPage - beforeAfterCount > 0 ? currentPage - beforeAfterCount : 1;
   const to =
     currentPage + beforeAfterCount <= totalPages ? currentPage + beforeAfterCount : totalPages;
@@ -30,7 +31,7 @@ function Numbers({ beforeAfterCount = 2, currentPage, totalPages }: NumbersProps
   for (let i = from; i <= to; i++) {
     arr.push(
       <PaginationItem key={i}>
-        <PaginationLink isActive={i === currentPage} href={`${routes.invoices}?page=${i}`}>
+        <PaginationLink isActive={i === currentPage} href={`${url}?page=${i}`}>
           {i}
         </PaginationLink>
       </PaginationItem>
@@ -40,25 +41,21 @@ function Numbers({ beforeAfterCount = 2, currentPage, totalPages }: NumbersProps
   return arr;
 }
 
-export function PaginationComponent({ totalPages, currentPage }: PaginationComponentProps) {
+export function PaginationComponent({ url, totalPages, currentPage }: PaginationComponentProps) {
   return (
     <Pagination className="mt-6">
       <PaginationContent>
         <PaginationItem>
           <Button disabled={currentPage === 1} variant="outline">
-            <PaginationPrevious
-              href={`${routes.invoices}?page=${currentPage - 1}`}
-            />
+            <PaginationPrevious href={`${url}?page=${currentPage - 1}`} />
           </Button>
         </PaginationItem>
 
-        <Numbers currentPage={currentPage} totalPages={totalPages} />
+        <Numbers url={url} currentPage={currentPage} totalPages={totalPages} />
 
         <PaginationItem>
           <Button disabled={currentPage === totalPages} variant="outline">
-            <PaginationNext
-              href={`${routes.invoices}?page=${currentPage + 1}`}
-            />
+            <PaginationNext href={`${url}?page=${currentPage + 1}`} />
           </Button>
         </PaginationItem>
       </PaginationContent>

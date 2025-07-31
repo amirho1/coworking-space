@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, routes } from "@/lib/utils";
 
 const mockData = [
   {
@@ -18,7 +18,7 @@ const mockData = [
     amount: 100000,
     status: "paid",
     date: "2021-01-01",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const mockData = [
     amount: 200000,
     status: "unpaid",
     date: "2021-01-02",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const mockData = [
     amount: 300000,
     status: "paid",
     date: "2021-01-03",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 4,
@@ -42,7 +42,7 @@ const mockData = [
     amount: 400000,
     status: "unpaid",
     date: "2021-01-04",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 5,
@@ -50,7 +50,7 @@ const mockData = [
     amount: 500000,
     status: "paid",
     date: "2021-01-05",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 6,
@@ -58,7 +58,7 @@ const mockData = [
     amount: 600000,
     status: "unpaid",
     date: "2021-01-06",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 7,
@@ -66,7 +66,7 @@ const mockData = [
     amount: 700000,
     status: "paid",
     date: "2021-01-07",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 8,
@@ -74,7 +74,7 @@ const mockData = [
     amount: 800000,
     status: "unpaid",
     date: "2021-01-08",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 9,
@@ -82,7 +82,7 @@ const mockData = [
     amount: 900000,
     status: "paid",
     date: "2021-01-09",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
   {
     id: 10,
@@ -90,7 +90,7 @@ const mockData = [
     amount: 1000000,
     status: "unpaid",
     date: "2021-01-10",
-    details: 'شرح صورتحساب 1',
+    details: "شرح صورتحساب 1",
   },
 ];
 
@@ -137,7 +137,11 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
         </TableBody>
       </Table>
 
-      <PaginationComponent totalPages={10} currentPage={page ? parseInt(page) : 1} />
+      <PaginationComponent
+        url={routes.invoices}
+        totalPages={10}
+        currentPage={page ? parseInt(page) : 1}
+      />
     </div>
   );
 }
