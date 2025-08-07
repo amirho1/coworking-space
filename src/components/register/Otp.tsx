@@ -11,6 +11,7 @@ import useTimer from "@/hooks/useTimer";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Resend from "./Resend";
 import { otpConfirm } from "@/app/register/actions";
+import ChangeEmailOrMobile from "./ChangeEmailOrMobile";
 
 interface OtpProps {
   setStep: (step: Step) => void;
@@ -102,13 +103,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
 
           <Resend time={time} username={username} onSuccess={setInternalDatetime} />
 
-          <Button
-            variant="link"
-            className="text-sm text-gray-600 m-auto block"
-            onClick={() => setStep("emailPhone")}
-          >
-            تغییر شماره تلفن
-          </Button>
+          <ChangeEmailOrMobile username={username} onClick={() => setStep("emailPhone")} />
         </CardContent>
       </Card>
     </div>
