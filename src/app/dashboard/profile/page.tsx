@@ -3,9 +3,11 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UserDetails from "@/components/UserDetails";
+import axiosInstance from "@/api";
+import apiRoutes from "@/lib/apiRoutes";
 
 export default async function Profile() {
+  const { data } = await axiosInstance.get(apiRoutes.profile);
   return (
     <div>
       <Card className="mx-auto overflow-hidden rounded-xl shadow-none p-0 border-none">
@@ -20,7 +22,7 @@ export default async function Profile() {
         </div>
         <CardContent className="pt-14 pb-6 text-center bg-white">
           <div className="flex items-center justify-center gap-2 font-semibold text-2xl">
-            Ella Lauda
+            {data.data.firstName} {data.data.lastName}
           </div>
           <div className="mt-2 flex flex-wrap justify-center gap-4 text-muted-foreground text-sm">
             <span className="flex items-center gap-1" title="Join date">
