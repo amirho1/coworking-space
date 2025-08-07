@@ -8,14 +8,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "./ui/input";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import axiosFront from "@/api/front";
-import { frontRoutes, routes, validatePhone } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { frontAPIs, routes, validatePhone } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const schema = z.object({
     username: z
       .email({ message: "ایمیل معتبر نیست" })
@@ -33,13 +32,15 @@ export default function LoginForm() {
 
   const onSubmit = (data: z.infer<typeof schema>) => {
     setLoading(true);
-    axiosFront
-      .post(frontRoutes.login, data)
+
+    fetch(frontAPIs.login, {
+      body: JSON.stringify(data),
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    })
       .then(() => {
         router.push(routes.services);
-      })
-      .catch(err => {
-        console.error(err);
       })
       .finally(() => {
         setLoading(false);
