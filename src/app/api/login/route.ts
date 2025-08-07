@@ -1,6 +1,6 @@
 import axiosInstance from "@/api";
 import apiRoutes from "@/lib/apiRoutes";
-import { setAuthCookies } from "@/lib/token";
+import { setAuthCookies } from "@/lib/utils";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,13 +14,11 @@ export async function POST(request: NextRequest) {
 
     if (response) {
       const res = NextResponse.json({ success: true }, { status: 200 });
-      const token = `Bearer ${accessToken}`;
-      const newRefreshToken = `Bearer ${refreshToken}`;
 
       setAuthCookies({
         res,
-        token,
-        refreshToken: newRefreshToken,
+        token: accessToken,
+        refreshToken,
       });
 
       return res;
