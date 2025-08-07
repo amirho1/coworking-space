@@ -26,7 +26,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
     success: false,
   });
 
-  const { minutes, seconds, time } = useTimer({ datetime: internalDatetime, waitTime: 120000 });
+  const { minutes, seconds, time } = useTimer({ datetime: internalDatetime, waitTime: 0 });
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true);
 
   useEffect(() => {
@@ -36,15 +36,20 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
     } else if (state.error) {
       toast.error(state.error);
     }
-  }, [state.error, state.success]);
+  }, [state]);
 
   function handleOtpChange(string: string) {
-    console.log(string, "9");
     if (string.length === 6) {
       setIsSubmitButtonDisabled(false);
     } else {
       setIsSubmitButtonDisabled(true);
     }
+  }
+
+  function handleSubmit(formData: FormData) {
+    formData.append("email", username);
+    formData.append("mobile", username);
+    formAction(formData);
   }
 
   return (
@@ -58,13 +63,13 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <form action={formAction}>
+          <form action={handleSubmit}>
             <div className="flex justify-center" dir="ltr">
               <InputOTP
                 maxLength={6}
                 disabled={isLoading}
                 autoFocus
-                name="otp"
+                name="otpCode"
                 onChange={handleOtpChange}
               >
                 <InputOTPGroup>
