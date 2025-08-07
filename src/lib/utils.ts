@@ -22,10 +22,11 @@ export const routes = {
   userServices: (id: number) => `/dashboard/users/services/${id}`,
 };
 
-export const frontRoutes = {
+export const frontAPIs = {
   otpConfirm: "/api/otp-confirm",
   register: "/api/register",
   login: "/api/login",
+  logout: "/api/logout",
 };
 
 export function validateEmail(email: string) {
@@ -58,3 +59,7 @@ export const persianWeekDays = [
   "پنجشنبه",
   "جمعه",
 ];
+
+export function checkExpiration(timeSecond?: number) {
+  return timeSecond !== undefined && Date.now() / 1000 < timeSecond;
+}
