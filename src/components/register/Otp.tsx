@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "sonner";
 import { Step } from "./Index";
 
-import axiosFront from "@/api/front";
-import { frontRoutes } from "@/lib/utils";
 import useTimer from "@/hooks/useTimer";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Resend from "./Resend";
+import { otpConfirm } from "@/app/register/actions";
 
 interface OtpProps {
   setStep: (step: Step) => void;
@@ -19,65 +19,32 @@ interface OtpProps {
 }
 
 export default function OTPForm({ setStep, datetime, username }: OtpProps) {
-  const [otp, setOtp] = useState("");
-  const { minutes, seconds, time } = useTimer({ datetime, waitTime: 120000 });
-  const [isLoading, setIsLoading] = useState(false);
+  const [internalDatetime, setInternalDatetime] = useState(datetime);
+  const [state, formAction, isLoading] = useActionState(otpConfirm, {
+    error: null,
+    success: false,
+  });
 
-  const handleOtpChange = (value: string) => {
-    setOtp(value);
+  const { minutes, seconds, time } = useTimer({ datetime: internalDatetime, waitTime: 120000 });
+  const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true);
 
-    // Auto-submit when all 6 digits are entered
-    if (value.length === 6 && time > 0) {
-      handleSubmit(value);
-    }
-  };
-
-  const handleSubmit = async (otpValue: string = otp) => {
-    if (otpValue.length !== 6) {
-      toast.error("Invalid OTP", {
-        description: "لطفاً هر ۶ رقم کد را وارد کنید",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      // Simulate API call
-      // await new Promise(resolve => setTimeout(resolve, 2000));
-      await axiosFront.post(frontRoutes.otpConfirm, { username, code: otpValue });
-
+  useEffect(() => {
+    if (state.success) {
       toast.success("کد با موفقیت تایید شد");
-
-      // Reset form after successful submission
-      setOtp("");
       setStep("form");
-    } catch (error: unknown) {
-      toast.error("تایید کد ناموفق بود. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
+    } else if (state.error) {
+      toast.error(state.error);
     }
-  };
+  }, [state.error, state.success]);
 
-  const handleResendOtp = async () => {
-    setIsLoading(true);
-
-    try {
-      // Simulate API call to resend OTP
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      toast.success("کد ارسال شد", {
-        description: "کد جدید به شماره شما ارسال شد",
-      });
-
-      // Clear current OTP
-      setOtp("");
-    } catch (error: unknown) {
-      toast.error("ارسال مجدد کد ناموفق بود. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
+  function handleOtpChange(string: string) {
+    console.log(string, "9");
+    if (string.length === 6) {
+      setIsSubmitButtonDisabled(false);
+    } else {
+      setIsSubmitButtonDisabled(true);
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -90,37 +57,37 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex justify-center" dir="ltr">
-            <InputOTP
-              maxLength={6}
-              value={otp}
-              onChange={handleOtpChange}
-              disabled={isLoading}
-              autoFocus
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
+          <form action={formAction}>
+            <div className="flex justify-center" dir="ltr">
+              <InputOTP
+                maxLength={6}
+                disabled={isLoading}
+                autoFocus
+                name="otp"
+                onChange={handleOtpChange}
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
 
-          <div className="text-center text-sm text-gray-600">
-            <p>کد ۶ رقمی ارسال شده به شماره خود را وارد کنید</p>
-            <p className="mt-1">
-              کد تا {minutes}:{seconds.toString().padStart(2, "0")} دقیقه معتبر است
-            </p>
-          </div>
+            <div className="text-center text-sm text-gray-600 mt-4">
+              <p>کد ۶ رقمی ارسال شده به شماره خود را وارد کنید</p>
+              <p className="mt-1">
+                کد تا {minutes}:{seconds.toString().padStart(2, "0")} دقیقه معتبر است
+              </p>
+            </div>
 
-          <div className="space-y-3">
             <Button
-              onClick={() => handleSubmit()}
-              className="w-full"
-              disabled={otp.length !== 6 || isLoading || time <= 0}
+              className="w-full mt-4"
+              type="submit"
+              disabled={isLoading || time <= 0 || isSubmitButtonDisabled}
             >
               {isLoading ? (
                 <>
@@ -131,33 +98,17 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
                 "تایید کد"
               )}
             </Button>
+          </form>
 
-            <Button
-              variant="outline"
-              onClick={handleResendOtp}
-              className="w-full bg-transparent"
-              disabled={isLoading || !(time <= 0)}
-            >
-              {isLoading ? (
-                <>
-                  <Icon icon="mdi:loading" className="mr-2 h-4 w-4 animate-spin" />
-                  در حال ارسال...
-                </>
-              ) : (
-                "ارسال مجدد کد"
-              )}
-            </Button>
-          </div>
+          <Resend time={time} username={username} onSuccess={setInternalDatetime} />
 
-          <div className="text-center">
-            <Button
-              variant="link"
-              className="text-sm text-gray-600"
-              onClick={() => setStep("emailPhone")}
-            >
-              تغییر شماره تلفن
-            </Button>
-          </div>
+          <Button
+            variant="link"
+            className="text-sm text-gray-600 m-auto block"
+            onClick={() => setStep("emailPhone")}
+          >
+            تغییر شماره تلفن
+          </Button>
         </CardContent>
       </Card>
     </div>

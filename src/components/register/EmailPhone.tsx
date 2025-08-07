@@ -19,22 +19,20 @@ const schema = z.object({
     .or(z.string().refine(validatePhone, { message: "موبایل معتبر نیست" })),
 });
 
-export default function EmailPhone({
-  setStep,
-  onChange,
-  value,
-  setDatetime,
-}: {
+interface EmailPhoneProps {
   setStep: (step: "emailPhone" | "otp") => void;
   onChange: (value: string) => void;
-  setDatetime: (datetime: number | undefined) => void;
   value: string;
-}) {
-  const [{ datetime, success, error }, formAction, isPending] = useActionState(otp, {
+  setDatetime: (datetime: number | undefined) => void;
+}
+
+export default function EmailPhone({ setStep, onChange, value, setDatetime }: EmailPhoneProps) {
+  const [state, formAction, isPending] = useActionState(otp, {
     error: null,
     success: false,
     datetime: undefined,
   });
+
   const ref = useRef<HTMLInputElement>(null);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -46,22 +44,24 @@ export default function EmailPhone({
 
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const formData = new FormData();
-    formData.append("emailOrPhone", data.emailOrPhone);
+    const isEMail = validateEmail(data.emailOrPhone);
+    formData.append(isEMail ? "email" : "mobile", data.emailOrPhone);
+
     startTransition(() => {
       formAction(formData);
-      onChange(formData.get("emailOrPhone") as string);
+      onChange(data.emailOrPhone as string);
     });
   };
 
   useEffect(() => {
-    if (success && datetime) {
+    if (state?.success && state?.datetime) {
       setStep("otp");
-      setDatetime(datetime);
+      setDatetime(state.datetime);
       toast.success("کد ارسال شد");
-    } else if (error) {
+    } else if (state?.error) {
       toast.error("خطایی در ارسال کد رخ داده است");
     }
-  }, [success, error]);
+  }, [state?.success, state?.error]);
 
   useEffect(() => {
     if (ref.current) {
