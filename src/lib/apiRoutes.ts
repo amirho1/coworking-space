@@ -1,9 +1,11 @@
 const apiRoutes = {
-  otp: "/account/otp",
-  otpConfirm: "/account/otp-confirm",
-  login: "/account/login",
-  register: "/account/register",
-  profile: "/account/profile",
+  otp: "/identity/account/otp",
+  otpConfirm: "/identity/account/otp-confirm",
+  login: "/identity/account/login",
+  register: "/identity/account/register",
+  profile: "/identity/account/profile",
+  refreshToken: "/identity/account/refresh-token",
+  
 };
 
 export default apiRoutes;

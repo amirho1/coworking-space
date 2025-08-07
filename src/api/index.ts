@@ -1,7 +1,7 @@
 "use server";
 
 import { config } from "@/lib/config";
-import { getToken } from "@/lib/getToken";
+import { getToken } from "@/lib/token";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -9,8 +9,9 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async config => {
-  const token = await getToken();
-  config.headers.Authorization = `Bearer ${token}`;
+  const { token, refreshToken } = await getToken();
+  config.headers.Authorization = token?.value;
+  config.headers.refresh_token = refreshToken?.value;
   return config;
 });
 

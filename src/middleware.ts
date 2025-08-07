@@ -1,38 +1,72 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { authRoutes, routes } from "@/lib/utils";
 import checkUserLogin from "@/api/checkUserLogin";
+import { checkTokenExpiration, getToken, setAuthCookies } from "./lib/token";
+import axiosInstance from "./api";
+import apiRoutes from "./lib/apiRoutes";
+
+function deleteAuthCookies(res: NextResponse) {
+  res.cookies.delete("Authorization");
+  res.cookies.delete("refresh_token");
+}
 
 export async function middleware(request: NextRequest) {
-  const authCookie = request.headers.get("Authorization");
-  if (!authCookie) {
-    // If the user is not logged in, redirect to the login page
+  const { validRefreshT, validToken } = await checkTokenExpiration();
 
-    if (authRoutes.includes(request.nextUrl.pathname)) {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL(routes.login, request.url));
-  }
-
-  try {
-    await checkUserLogin();
-  } catch (error) {
-    // If the user is not logged in, redirect to the login page
+  if (!validToken || !validRefreshT) {
     const res = NextResponse.redirect(new URL(routes.login, request.url));
-    res.headers.delete("Authorization");
-    return res;
-  }
 
-  if (request.nextUrl.pathname === routes.home) {
-    return NextResponse.redirect(new URL(routes.dashboard, request.url));
-  }
+    if (!validRefreshT) {
+      deleteAuthCookies(res);
+    }
 
-  //  If the user is logged in and tries to access the login or sign-up page, redirect to the home page
-  if (authRoutes.includes(request.nextUrl.pathname)) {
-    return NextResponse.redirect(new URL(routes.home, request.url));
-  }
+    if (!validToken && validRefreshT) {
+      const { refreshToken } = await getToken();
+      try {
+        const refreshTokenRes = await axiosInstance.post(apiRoutes.refreshToken, {
+          refreshToken: refreshToken?.value,
+        });
 
-  return NextResponse.next();
+        const newRefresh = refreshTokenRes.data.data.refreshToken;
+        const newToken = refreshTokenRes.data.data.refreshToken;
+
+        setAuthCookies({
+          res,
+          token: newToken,
+          refreshToken: newRefresh,
+        });
+
+        if (authRoutes.includes(request.nextUrl.pathname)) {
+          return NextResponse.next();
+        }
+
+        return res;
+      } catch {
+        deleteAuthCookies(res);
+        return NextResponse.redirect(new URL(routes.login, request.url));
+      }
+    }
+
+    try {
+      await checkUserLogin();
+    } catch (error) {
+      console.error(error);
+
+      const res = NextResponse.redirect(new URL(routes.login, request.url));
+
+      return res;
+    }
+
+    if (request.nextUrl.pathname === routes.home) {
+      return NextResponse.redirect(new URL(routes.services, request.url));
+    } else if (authRoutes.includes(request.nextUrl.pathname)) {
+      //  If the user is logged in and tries to access the login or sign-up page, redirect to the home page
+      return NextResponse.redirect(new URL(routes.services, request.url));
+    }
+
+    return NextResponse.next();
+  }
 }
 
 // See "Matching Paths" below to learn more
