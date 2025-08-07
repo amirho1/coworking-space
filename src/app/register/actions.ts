@@ -2,6 +2,7 @@
 
 import axiosInstance from "@/api";
 import apiRoutes from "@/lib/apiRoutes";
+import { validateEmail } from "@/lib/utils";
 import axios from "axios";
 
 interface OtpState {
@@ -40,25 +41,27 @@ export async function otpConfirm(_: OtpConfirmState, formData: FormData) {
   const email = formData.get("email") as string;
   const mobile = formData.get("mobile") as string;
   const otpCode = formData.get("otpCode") as string;
+  const isEmail = validateEmail(email);
+
+  const ob = isEmail ? { email } : { mobile };
 
   try {
     const res = await axiosInstance.post(apiRoutes.otpConfirm, {
-      email,
-      mobile,
+      ...ob,
       otpCode,
     });
 
-    if (res.status === 200) {
+    if (res.data.isSuccess) {
       return { error: null, success: true };
     }
 
-    return { error: "Failed to confirm OTP", success: false };
+
+    return { error: res.data.message, success: false };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const errorMessage = error.response?.data?.message || "خطا در تایید کد";
       return { error: errorMessage as string, success: false };
     }
-    console.error("Unexpected error in OTP confirmation:", error);
     return { error: "خطا در تایید کد", success: false };
   }
 }
