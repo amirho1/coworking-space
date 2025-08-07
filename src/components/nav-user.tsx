@@ -17,8 +17,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { routes } from "@/lib/utils";
+import { frontAPIs, routes } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import axiosFront from "@/api/front";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
@@ -30,6 +32,14 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
+
+  function logout() {
+    document.cookie = "Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    axiosFront.post(frontAPIs.logout).then(async () => {
+      router.replace(routes.login);
+    });
+  }
 
   return (
     <SidebarMenu>
@@ -85,7 +95,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500 hover:text-red-500">
+            <DropdownMenuItem onClick={logout} className="text-red-500 hover:text-red-500">
               <Icon icon="mdi:logout" />
               خروج
             </DropdownMenuItem>
