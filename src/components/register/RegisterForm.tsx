@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { DatePicker } from "../ui/datePicker";
 import axiosFront from "@/api/front";
-import { frontRoutes } from "@/lib/utils";
+import { frontAPIs } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -68,9 +68,8 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
     formData.append("birthdate", data.birthdate.toISOString());
     formData.append("nationalCode", data.nationalCode);
 
-    console.log(formData.get("nationalCard"));
     axiosFront
-      .post(frontRoutes.register, formData)
+      .post(frontAPIs.register, formData)
       .then(() => {
         router.push("/login");
       })
