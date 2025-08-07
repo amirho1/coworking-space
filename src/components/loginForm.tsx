@@ -40,7 +40,7 @@ export default function LoginForm() {
       headers: { "Content-Type": "application/json" },
     })
       .then(() => {
-        router.push(routes.services);
+        router.replace(routes.services);
       })
       .finally(() => {
         setLoading(false);
