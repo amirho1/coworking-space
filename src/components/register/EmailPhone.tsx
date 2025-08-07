@@ -15,7 +15,7 @@ import Link from "next/link";
 const schema = z.object({
   emailOrPhone: z
     .string()
-    .refine(validateEmail, { message: "ایمیل معتبر نیست" })
+    .refine(validateEmail, { message: "ایمیل یا شماره تماس معتبر نیست" })
     .or(z.string().refine(validatePhone, { message: "موبایل معتبر نیست" })),
 });
 
@@ -61,7 +61,7 @@ export default function EmailPhone({ setStep, onChange, value, setDatetime }: Em
     } else if (state?.error) {
       toast.error("خطایی در ارسال کد رخ داده است");
     }
-  }, [state?.success, state?.error]);
+  }, [state, state]);
 
   useEffect(() => {
     if (ref.current) {
