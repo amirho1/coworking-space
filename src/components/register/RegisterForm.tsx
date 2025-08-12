@@ -182,7 +182,7 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
                 )}
               />
             ))}
-            <Button type="submit" className="w-full mt-2">
+            <Button type="submit" className="mt-2 col-span-full">
               ثبت نام
             </Button>
           </form>
