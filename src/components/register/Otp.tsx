@@ -12,14 +12,16 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import Resend from "./Resend";
 import { otpConfirm } from "@/app/register/actions";
 import ChangeEmailOrMobile from "./ChangeEmailOrMobile";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 interface OtpProps {
   setStep: (step: Step) => void;
   datetime: number;
-  username: string;
+  mobile: string;
+  email: string;
 }
 
-export default function OTPForm({ setStep, datetime, username }: OtpProps) {
+export default function OTPForm({ setStep, datetime, email, mobile }: OtpProps) {
   const [internalDatetime, setInternalDatetime] = useState(datetime);
   const [state, formAction, isLoading] = useActionState(otpConfirm, {
     error: null,
@@ -34,11 +36,13 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
       toast.success("کد با موفقیت تایید شد");
       setStep("form");
     } else if (state.error) {
+      console.error(state.error);
       toast.error(state.error);
     }
   }, [state]);
 
   function handleOtpChange(string: string) {
+    const containsOnlyNumbers = /^\d+$/.test(string);
     if (string.length === 6) {
       setIsSubmitButtonDisabled(false);
     } else {
@@ -47,8 +51,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
   }
 
   function handleSubmit(formData: FormData) {
-    formData.append("email", username);
-    formData.append("mobile", username);
+    formData.append(mobile !== "" ? "mobile" : "email", mobile || email);
     formAction(formData);
   }
 
@@ -70,6 +73,7 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
                 disabled={isLoading}
                 autoFocus
                 name="otpCode"
+                pattern={REGEXP_ONLY_DIGITS}
                 onChange={handleOtpChange}
               >
                 <InputOTPGroup>
@@ -106,9 +110,13 @@ export default function OTPForm({ setStep, datetime, username }: OtpProps) {
             </Button>
           </form>
 
-          <Resend time={time} username={username} onSuccess={setInternalDatetime} />
+          <Resend time={time} mobile={mobile} email={email} onSuccess={setInternalDatetime} />
 
-          <ChangeEmailOrMobile username={username} onClick={() => setStep("emailPhone")} />
+          <ChangeEmailOrMobile
+            mobile={mobile}
+            email={email}
+            onClick={() => setStep("emailPhone")}
+          />
         </CardContent>
       </Card>
     </div>

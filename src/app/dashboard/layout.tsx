@@ -15,7 +15,6 @@ interface DashboardLayoutProps {
 
 export default async function DashboardLayout({ children }: DashboardLayoutProps) {
   const { data } = await axiosInstance.get(apiRoutes.profile);
-  console.log(data, "data in dashboard layout");
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" user={data.data} side="right" />

@@ -33,7 +33,6 @@ export function NavUser({ user }: { user: User }) {
       router.replace(routes.login);
     });
   }
-  console.log(user, "user in nav user");
 
   return (
     <SidebarMenu>

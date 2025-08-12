@@ -1,13 +1,13 @@
 import { HTMLAttributes } from "react";
 import { Button } from "../ui/button";
-import { validateEmail } from "@/lib/utils";
 
 interface ChangeEmailOrMobileProps extends HTMLAttributes<HTMLButtonElement> {
-  username: string;
+  mobile?: string;
+  email?: string;
 }
 
-export default function ChangeEmailOrMobile({ username, ...props }: ChangeEmailOrMobileProps) {
-  const text = validateEmail(username) ? "تغییر ایمیل" : "تغییر شماره تلفن";
+export default function ChangeEmailOrMobile({ mobile, email, ...props }: ChangeEmailOrMobileProps) {
+  const text = mobile || email ? "تغییر ایمیل" : "تغییر شماره تلفن";
 
   return (
     <Button variant="link" className="text-sm text-gray-600 m-auto block" {...props}>

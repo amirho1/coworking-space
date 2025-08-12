@@ -2,16 +2,16 @@ import { otp } from "@/app/register/actions";
 import { useActionState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { validateEmail } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface ResendProps extends React.HTMLAttributes<HTMLButtonElement> {
   time: number;
-  username: string;
   onSuccess?: (datetime: number) => void;
+  mobile?: string;
+  email?: string;
 }
 
-export default function Resend({ time, username, onSuccess, ...props }: ResendProps) {
+export default function Resend({ time, mobile, email, onSuccess, ...props }: ResendProps) {
   const [state, formAction, isLoading] = useActionState(otp, {
     error: null,
     success: false,
@@ -19,9 +19,8 @@ export default function Resend({ time, username, onSuccess, ...props }: ResendPr
   });
 
   function handleSubmit() {
-    const isEmail = validateEmail(username);
     const formData = new FormData();
-    formData.append(isEmail ? "email" : "mobile", username);
+    formData.append(email ? "email" : "mobile", (email || mobile) as string);
 
     formAction(formData);
   }
@@ -29,7 +28,6 @@ export default function Resend({ time, username, onSuccess, ...props }: ResendPr
   useEffect(() => {
     if (state.success && state?.datetime) {
       toast.success("کد تایید مجدداً ارسال شد");
-      console.log("OTP sent successfully", state.datetime);
       onSuccess?.(new Date(state.datetime).getTime());
     } else if (state.error) {
       toast.error(state.error);

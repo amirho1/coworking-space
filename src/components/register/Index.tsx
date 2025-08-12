@@ -11,6 +11,8 @@ export default function Register() {
   const [emailPhone, setEmailPhone] = useState<string>("");
   const [datetime, setDatetime] = useState<number | undefined>(undefined);
   const isEmail = emailPhone.includes("@");
+  const mobile = isEmail ? "" : emailPhone;
+  const email = isEmail ? emailPhone : "";
 
   const components = {
     emailPhone: (
@@ -21,8 +23,8 @@ export default function Register() {
         setDatetime={setDatetime}
       />
     ),
-    otp: <Otp setStep={setStep} datetime={datetime ?? 0} username={isEmail ? emailPhone : ""} />,
-    form: <RegisterForm email={isEmail ? emailPhone : ""} phone={isEmail ? "" : emailPhone} />,
+    otp: <Otp setStep={setStep} datetime={datetime ?? 0} email={email} mobile={mobile} />,
+    form: <RegisterForm email={email} mobile={mobile} />,
   };
 
   return (

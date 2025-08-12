@@ -38,23 +38,13 @@ export interface OtpConfirmState {
 }
 
 export async function otpConfirm(_: OtpConfirmState, formData: FormData) {
-  const email = formData.get("email") as string;
-  const mobile = formData.get("mobile") as string;
-  const otpCode = formData.get("otpCode") as string;
-  const isEmail = validateEmail(email);
-
-  const ob = isEmail ? { email } : { mobile };
-
   try {
-    const res = await axiosInstance.post(apiRoutes.otpConfirm, {
-      ...ob,
-      otpCode,
-    });
+    const data = Object.fromEntries(formData.entries());
+    const res = await axiosInstance.post(apiRoutes.otpConfirm, data);
 
     if (res.data.isSuccess) {
       return { error: null, success: true };
     }
-
 
     return { error: res.data.message, success: false };
   } catch (error) {

@@ -14,69 +14,60 @@ import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { DatePicker } from "../ui/datePicker";
-import axiosFront from "@/api/front";
-import { frontAPIs } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { startTransition, useActionState, useEffect, useRef } from "react";
+import { register } from "@/app/register/registerAction";
+import { toast } from "sonner";
+import { imageFormats, registerFormSchema } from "@/lib/schemas/registerForm";
 
-const imageFormats = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+interface RegisterFormProps {
+  email?: string;
+  mobile?: string;
+}
 
-export default function RegisterForm({ email = "", phone = "" }: { email: string; phone: string }) {
+export default function RegisterForm({ email = "", mobile = "" }: RegisterFormProps) {
   const router = useRouter();
-  const firstInputRef = useRef<HTMLInputElement>(null);
-  const schema = z
-    .object({
-      name: z.string().min(3, { message: "نام باید حداقل 3 کاراکتر باشد" }),
-      lastname: z.string().min(3, { message: "نام خانوادگی باید حداقل 3 کاراکتر باشد" }),
-      email: z.email({ message: "ایمیل معتبر نیست" }),
-      phone: z.string().min(11, { message: "شماره موبایل باید حداقل 11 رقم باشد" }),
-      birthdate: z.date(),
-      nationalCode: z.string().min(3, { message: "کد ملی باید حداقل 3 کاراکتر باشد" }),
-      password: z.string().min(8, { message: "رمز عبور باید حداقل 8 کاراکتر باشد" }),
-      passwordConfirm: z.string().min(8, { message: "تایید رمز عبور باید حداقل 8 کاراکتر باشد" }),
-      nationalCard: z
-        .custom<File>(v => v instanceof File, { message: "بارگذاری تصویر کارت ملی الزامی است" })
-        .refine(file => imageFormats.includes(file.type), "فرمت تصویر باید jpeg/png/webp باشد")
-        .refine(file => file.size <= 2 * 1024 * 1024, "حجم فایل حداکثر باید ۲ مگابایت باشد"),
-    })
-    .refine(data => data.password === data.passwordConfirm, {
-      message: "رمز عبور و تایید رمز عبور مطابقت ندارند",
-      path: ["passwordConfirm"],
-    });
+  const [state, formAction] = useActionState(register, { error: null, success: false });
 
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  const form = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
       lastname: "",
       birthdate: new Date(),
       nationalCode: "",
-      nationalCard: undefined,
+      file: undefined,
       email,
-      phone,
+      mobile,
       password: "",
       passwordConfirm: "",
     },
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
+  const onSubmit = (data: z.infer<typeof registerFormSchema>) => {
     const formData = new FormData();
-    formData.append("nationalCard", data.nationalCard);
-    formData.append("name", data.name);
-    formData.append("lastname", data.lastname);
-    formData.append("birthdate", data.birthdate.toISOString());
-    formData.append("nationalCode", data.nationalCode);
+    Object.keys(data).forEach(key => {
+      const value = data[key as keyof typeof data];
+      if (key === "file" && value instanceof File) {
+        formData.append(key, value);
+      } else {
+        formData.append(key, String(value));
+      }
+    });
 
-    axiosFront
-      .post(frontAPIs.register, formData)
-      .then(() => {
-        router.push("/login");
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    startTransition(() => formAction(formData));
   };
+
+  useEffect(() => {
+    if (state.success) {
+      router.push("/login");
+    } else if (state.error) {
+      toast.error(state.error);
+    }
+  }, [state.success, router]);
 
   const fields = [
     {
@@ -111,7 +102,7 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
       type: "email",
     },
     {
-      name: "phone",
+      name: "mobile",
       label: "شماره موبایل",
       placeholder: "09123456789",
       type: "text",
@@ -130,7 +121,7 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
     },
 
     {
-      name: "nationalCard",
+      name: "file",
       label: "کارت ملی",
       placeholder: "کارت ملی",
       type: "file",
@@ -150,46 +141,47 @@ export default function RegisterForm({ email = "", phone = "" }: { email: string
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {fields.map(({ name, label, placeholder, type, ref }) => (
-                <FormField
-                  key={name}
-                  name={name}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{label}</FormLabel>
-                      <FormControl>
-                        {type === "file" ? (
-                          <Input
-                            type="file"
-                            accept={imageFormats.join(",")}
-                            onChange={e => field.onChange(e.target.files?.[0])}
-                            onBlur={field.onBlur}
-                            name={field.name}
-                            ref={field.ref}
-                          />
-                        ) : type === "date" ? (
-                          <DatePicker field={field} />
-                        ) : (
-                          <Input
-                            placeholder={placeholder}
-                            {...field}
-                            type={type}
-                            ref={e => {
-                              field.ref(e);
-                              if (ref) ref.current = e;
-                            }}
-                          />
-                        )}
-                      </FormControl>
-                      <FormDescription />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid grid-cols-1 md:grid-cols-2 gap-2"
+          >
+            {fields.map(({ name, label, placeholder, type, ref }) => (
+              <FormField
+                key={name}
+                name={name}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{label}</FormLabel>
+                    <FormControl>
+                      {type === "file" ? (
+                        <Input
+                          type="file"
+                          accept={imageFormats.join(",")}
+                          onChange={e => field.onChange(e.target.files?.[0])}
+                          onBlur={field.onBlur}
+                          name={field.name}
+                          ref={field.ref}
+                        />
+                      ) : type === "date" ? (
+                        <DatePicker field={field} />
+                      ) : (
+                        <Input
+                          placeholder={placeholder}
+                          {...field}
+                          type={type}
+                          ref={e => {
+                            field.ref(e);
+                            if (ref) ref.current = e;
+                          }}
+                        />
+                      )}
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
             <Button type="submit" className="w-full mt-2">
               ثبت نام
             </Button>
