@@ -1,5 +1,6 @@
 import z from "zod";
 import { validatePhone } from "../utils";
+import { isValidIranNationalCode } from "../nationalCodeValidation";
 
 export const imageFormats = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
 
@@ -13,7 +14,12 @@ export const registerFormSchema = z
       .min(11, { message: "شماره موبایل باید حداقل 11 رقم باشد" })
       .refine(validatePhone, { message: "شماره موبایل معتبر نیست" }),
     birthdate: z.date(),
-    nationalCode: z.string().min(3, { message: "کد ملی باید حداقل 3 کاراکتر باشد" }),
+    nationalCode: z
+      .string()
+      .min(10, { message: "کد ملی باید حداقل 10 کاراکتر باشد" })
+      .refine(isValidIranNationalCode, {
+        message: "کد ملی معتبر نیست",
+      }),
     password: z.string().min(8, { message: "رمز عبور باید حداقل 8 کاراکتر باشد" }),
     passwordConfirm: z.string().min(8, { message: "تایید رمز عبور باید حداقل 8 کاراکتر باشد" }),
     file: z
