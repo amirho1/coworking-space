@@ -53,7 +53,11 @@ export async function middleware(req: NextRequest) {
   try {
     await checkUserLogin();
   } catch {
-    return redirect(routes.login, req);
+    const res = redirect(routes.login, req);
+
+    deleteAuthCookies(res);
+
+    return res;
   }
 
   /* --- 4. Route guards when logged-in ----------------------------- */
