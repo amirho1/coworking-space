@@ -89,7 +89,6 @@ export function DatePicker({ field }: { field: ControllerRenderProps<FieldValues
   const [date, setDate] = useState<Date | undefined>(field?.value as Date | undefined);
   const [month, setMonth] = useState<Date | undefined>(date);
   const [value, setValue] = useState(formatDate(field?.value as Date | undefined));
-  console.log(value);
   return (
     <div className="flex flex-col gap-3">
       <div className="relative flex gap-2">

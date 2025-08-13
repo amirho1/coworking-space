@@ -1,68 +1,37 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
 import { routes } from "@/lib/utils";
+import { MeetingRoom } from "@/app/dashboard/meeting-rooms/page";
+import MeetingCarousel from "./meeting-rooms/Carousel";
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "available":
-      return "bg-green-100 text-green-800";
-    case "occupied":
-      return "bg-red-100 text-red-800";
-    case "maintenance":
-      return "bg-yellow-100 text-yellow-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
+export default function RoomCard({ room }: { room: MeetingRoom }) {
+  const capacity = room.attributes.find(attr => /\d - \d/.test(attr));
 
-const getStatusText = (status: string) => {
-  switch (status) {
-    case "available":
-      return "موجود";
-    case "occupied":
-      return "اشغال شده";
-    case "maintenance":
-      return "تعمیرات";
-    default:
-      return "نامشخص";
-  }
-};
-
-export default function RoomCard({ room }: { room: any }) {
   return (
     <Card key={room.id} className="overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>
             <CardTitle className="text-lg">{room.name}</CardTitle>
-            <CardDescription className="flex items-center mt-1">
-              <Icon icon="mdi:map-marker" className="h-3 w-3 mr-1" />
-              {room.location}
-            </CardDescription>
           </div>
-          <Badge className={getStatusColor(room.status)} variant="secondary">
-            {getStatusText(room.status)}
+          <Badge variant="secondary" className="bg-green-500 text-white">
+            {room.isActive ? "فعال" : "غیرفعال"}
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        <MeetingCarousel list={room.images} />
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">ظرفیت:</span>
-          <span className="font-medium">{room.capacity} نفر</span>
-        </div>
-
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">موجودی بعدی:</span>
-          <span className="font-medium">{room.nextBooking}</span>
+          <span className="font-medium">{capacity} نفر</span>
         </div>
 
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">امکانات:</p>
           <div className="flex flex-wrap gap-1">
-            {room.features.map((feature: string) => (
+            {room.attributes.map((feature: string) => (
               <Badge key={feature} variant="outline" className="text-xs">
                 {feature}
               </Badge>
@@ -70,7 +39,7 @@ export default function RoomCard({ room }: { room: any }) {
           </div>
         </div>
 
-        <Button className="w-full" disabled={room.status !== "available"}>
+        <Button className="w-full" disabled={!room.isActive}>
           <Link href={`${routes.meetingRooms}/${room.id}`} className="w-full">
             رزرو
           </Link>

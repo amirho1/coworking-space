@@ -5,7 +5,7 @@ const apiRoutes = {
   register: "/identity/account/register",
   profile: "/identity/account/profile",
   refreshToken: "/identity/account/refresh-token",
-  
+  meetingRooms: "/meeting-room",
 };
 
 export default apiRoutes;
