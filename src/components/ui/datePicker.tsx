@@ -1,20 +1,22 @@
 "use client";
 
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/Calendar";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns-jalali";
-import { ControllerRenderProps } from "react-hook-form";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+import { ClassNames, CustomComponents, DropdownOption } from "react-day-picker";
+import { useState } from "react";
 
 function formatDate(date: Date | undefined) {
   if (!date) {
@@ -46,51 +48,48 @@ const persianMonths = [
   "اسفند",
 ];
 
-function CustomMonthsDropdown(props: any) {
+function CustomMonthsDropdown({
+  classNames,
+  ...props
+}: {
+  components: CustomComponents;
+  classNames: ClassNames;
+  options?: DropdownOption[] | undefined;
+} & Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "children">) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild className="z-50">
-        <Button variant="outline">
-          {persianMonths[props.value]}
-          <Icon icon="mdi:chevron-down" className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        {persianMonths.map((month, index) => (
-          <DropdownMenuItem
-            key={index}
-            onClick={() => {
-              props.onChange(props.options[index]);
-            }}
-            className="justify-center cursor-pointer"
-          >
-            {month}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="z-50">
+      <Select
+        dir="rtl"
+        onValueChange={value => {
+          props.onChange?.({
+            currentTarget: { value: props?.value },
+            target: { value: props?.value },
+          } as any);
+        }}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder={persianMonths[props.value]} className="z-50" />
+        </SelectTrigger>
+        <SelectContent {...props} onChange={console.log}>
+          <SelectGroup>
+            {persianMonths.map((month, index) => (
+              <SelectItem key={index} value={index.toString()}>
+                {month}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 
-export function DatePicker({
-  field,
-}: {
-  field: ControllerRenderProps<
-    {
-      name: string;
-      lastname: string;
-      birthdate: Date;
-      nationalCode: string;
-      nationalCard: File;
-    },
-    "birthdate"
-  >;
-}) {
-  const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(field?.value as Date | undefined);
-  const [month, setMonth] = React.useState<Date | undefined>(date);
-  const [value, setValue] = React.useState(formatDate(field?.value as Date | undefined));
-
+export function DatePicker({ field }: { field: ControllerRenderProps<FieldValues, string> }) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(field?.value as Date | undefined);
+  const [month, setMonth] = useState<Date | undefined>(date);
+  const [value, setValue] = useState(formatDate(field?.value as Date | undefined));
+  console.log(value);
   return (
     <div className="flex flex-col gap-3">
       <div className="relative flex gap-2">
@@ -99,15 +98,6 @@ export function DatePicker({
           value={value}
           placeholder="June 01, 2025"
           className="bg-background "
-          onChange={e => {
-            const date = new Date(e.target.value);
-            setValue(e.target.value);
-            if (isValidDate(date)) {
-              field.onChange(date);
-              setDate(date);
-              setMonth(date);
-            }
-          }}
           onFocus={() => {
             setOpen(true);
           }}
@@ -139,13 +129,10 @@ export function DatePicker({
               mode="single"
               selected={date}
               captionLayout="dropdown"
-              components={{
-                // MonthCaption: CustomMonthCaption,
-                MonthsDropdown: CustomMonthsDropdown,
-              }}
               month={month}
               onMonthChange={setMonth}
               onSelect={date => {
+                field.onChange(date);
                 setDate(date);
                 setValue(formatDate(date));
                 setOpen(false);

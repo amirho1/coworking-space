@@ -13,7 +13,7 @@ export const registerFormSchema = z
       .string()
       .min(11, { message: "شماره موبایل باید حداقل 11 رقم باشد" })
       .refine(validatePhone, { message: "شماره موبایل معتبر نیست" }),
-    birthdate: z.date(),
+    dateOfBirth: z.date(),
     nationalCode: z
       .string()
       .min(10, { message: "کد ملی باید حداقل 10 کاراکتر باشد" })

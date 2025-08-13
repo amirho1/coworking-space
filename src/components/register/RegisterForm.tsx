@@ -19,6 +19,7 @@ import { startTransition, useActionState, useEffect, useRef } from "react";
 import { register } from "@/app/register/registerAction";
 import { toast } from "sonner";
 import { imageFormats, registerFormSchema } from "@/lib/schemas/registerForm";
+import { format } from "date-fns-jalali";
 
 interface RegisterFormProps {
   email?: string;
@@ -36,7 +37,7 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
     defaultValues: {
       name: "",
       lastname: "",
-      birthdate: new Date(),
+      dateOfBirth: new Date(),
       nationalCode: "",
       file: undefined,
       email,
@@ -53,6 +54,8 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
       const value = data[key as keyof typeof data];
       if (key === "file" && value instanceof File) {
         formData.append(key, value);
+      } else if (key === "dateOfBirth" && value instanceof Date) {
+        formData.append(key, format(value, "yyyy-MM-dd"));
       } else {
         formData.append(key, String(value));
       }
@@ -65,9 +68,11 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
     if (state.success) {
       router.push("/login");
     } else if (state.error) {
-      toast.error(state.error);
+      if (Array.isArray(state.error)) {
+        state.error.forEach(error => toast.error(error.errorMessage || "خطا در ثبت نام"));
+      } else toast.error(state.error);
     }
-  }, [state.success, router]);
+  }, [state, router]);
 
   const fields = [
     {
@@ -108,7 +113,7 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
       type: "text",
     },
     {
-      name: "birthdate",
+      name: "dateOfBirth",
       label: "تاریخ تولد",
       placeholder: "تاریخ تولد",
       type: "date",
