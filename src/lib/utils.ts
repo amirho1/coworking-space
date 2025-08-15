@@ -93,3 +93,10 @@ export function deleteAuthCookies(res: NextResponse) {
   res.cookies.delete("Authorization");
   res.cookies.delete("refresh_token");
 }
+
+export function isValidDate(date: Date | undefined) {
+  if (!date) {
+    return false;
+  }
+  return !isNaN(date.getTime());
+}
