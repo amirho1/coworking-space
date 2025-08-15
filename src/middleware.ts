@@ -17,7 +17,7 @@ async function rotateTokens(req: NextRequest) {
     const res = NextResponse.next();
     const {
       data: {
-        data: { token: newToken, refreshToken: newRefresh },
+        data: { accessToken: newToken, refreshToken: newRefresh },
       },
     } = await axiosInstance.post(apiRoutes.refreshToken, {
       refreshToken: refreshToken?.value,
