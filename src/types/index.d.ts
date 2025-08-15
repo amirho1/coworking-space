@@ -5,3 +5,14 @@ export interface User {
   email: string;
   avatar: string;
 }
+
+export interface Reserve {
+  id: number;
+  bookingDate: string;
+  persianDate: string;
+  startTime: string;
+  endTime: string;
+  userId: number;
+  userName: string;
+  avatarUrl: string;
+}
