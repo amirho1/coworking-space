@@ -22,6 +22,8 @@ export const routes = {
   users: "/dashboard/users",
   userDetails: (id: number) => `/dashboard/users/${id}`,
   userMeetingRooms: (id: number) => `/dashboard/users/meeting-rooms/${id}`,
+  meetingRoom: (id: string | number, date: string) =>
+    `/dashboard/meeting-rooms/${id}/?date=${date}`,
   userServices: (id: number) => `/dashboard/users/services/${id}`,
 };
 
@@ -85,8 +87,8 @@ const cookieConfigs: Partial<ResponseCookie> = {
 };
 
 export function setAuthCookies({ res, token, refreshToken }: SetAuthCookiesParams) {
-  res.cookies.set("Authorization", `Bearer ${token}` as string, cookieConfigs);
-  res.cookies.set("refresh_token", `Bearer ${refreshToken}` as string, cookieConfigs);
+  res.cookies.set("Authorization", `Bearer ${token}`, cookieConfigs);
+  res.cookies.set("refresh_token", refreshToken, cookieConfigs);
 }
 
 export function deleteAuthCookies(res: NextResponse) {
@@ -99,4 +101,9 @@ export function isValidDate(date: Date | undefined) {
     return false;
   }
   return !isNaN(date.getTime());
+}
+
+export function validDate(dateString: string | Date) {
+  const date = new Date(dateString);
+  return isValidDate(date) ? date : new Date();
 }

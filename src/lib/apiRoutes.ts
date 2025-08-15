@@ -6,6 +6,9 @@ const apiRoutes = {
   profile: "/identity/account/profile",
   refreshToken: "/identity/account/refresh-token",
   meetingRooms: "/meeting-room",
+  meetingRoom(id: string | number) {
+    return `/meeting-room/${id}`;
+  },
 };
 
 export default apiRoutes;
