@@ -12,9 +12,9 @@ const redirect = (to: string, req: NextRequest) => NextResponse.redirect(new URL
 
 async function rotateTokens(req: NextRequest) {
   const { refreshToken } = await getToken();
-  const res = NextResponse.next(); // cookies will be mutated on success
 
   try {
+    const res = NextResponse.next();
     const {
       data: {
         data: { token: newToken, refreshToken: newRefresh },
@@ -27,8 +27,10 @@ async function rotateTokens(req: NextRequest) {
 
     return res;
   } catch {
+    const res = redirect(routes.login, req); // cookies will be mutated on success
+
     deleteAuthCookies(res);
-    return redirect(routes.login, req);
+    return res;
   }
 }
 
