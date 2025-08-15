@@ -3,6 +3,8 @@ import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextResponse } from "next/server";
 import { twMerge } from "tailwind-merge";
 import { config } from "./config";
+import { format } from "date-fns";
+import { newDate } from "date-fns-jalali";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -103,7 +105,20 @@ export function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-export function validDate(dateString: string | Date) {
-  const date = new Date(dateString);
-  return isValidDate(date) ? date : new Date();
+export function validDate(dateString: string | undefined) {
+  if (!dateString) return new Date();
+
+  try {
+    const splittedDate = dateString
+      ?.split("-")
+      ?.map((str, index) => (index === 1 ? +str - 1 : +str)) as [number, number, number];
+
+    const persianDate = newDate(...splittedDate);
+
+    const gregorianDate = new Date(format(persianDate, "yyyy-MM-dd"));
+
+    return isValidDate(gregorianDate) ? gregorianDate : new Date();
+  } catch {
+    return new Date();
+  }
 }
