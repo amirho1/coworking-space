@@ -1,13 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import randColor from "@/lib/randColor";
+import { Reserve } from "@/types";
 
-interface Data {
-  name: string;
-  start_time: number | string;
-  end_time: number | string;
-  date: string;
-}
 function calcDurationMinute(start: string, end: string) {
   const [startHour, startMinute] = start.split(":").map(Number);
   const [endHour, endMinute] = end.split(":").map(Number);
@@ -21,27 +16,26 @@ export default function ReservedCard({
 }: {
   hourIndex: number;
   currentDate: string;
-  objectData: Record<string, Data[]>;
+  objectData: Record<string, Reserve[]>;
 }) {
   const currentDayReserves = objectData[currentDate];
   const regex = new RegExp(`${hourIndex >= 10 ? "" : 0}${hourIndex}:`);
-  const reserves = currentDayReserves?.filter(({ start_time }) =>
-    regex.test(start_time.toString())
-  );
+  const reserves = currentDayReserves?.filter(({ startTime }) => regex.test(startTime.toString()));
+
   if (!reserves?.length) return null;
 
   return reserves.map((reserve, index) => {
     const durationMinute = calcDurationMinute(
-      reserve.start_time.toString(),
-      reserve.end_time.toString()
+      reserve.startTime.toString(),
+      reserve.endTime.toString()
     );
 
-    const top = +reserve.start_time.toString().split(":")[1] >= 30 ? 30 : 0;
+    const top = +reserve.startTime.toString().split(":")[1] >= 30 ? 30 : 0;
 
     return (
       reserve && (
         <div
-          className={`flex absolute gap-4 border rounded   w-full z-10 right-0`}
+          className="flex absolute gap-4 border rounded   w-full z-10 right-0"
           key={index}
           style={{ backgroundColor: randColor(), height: `${durationMinute}px`, top: `${top}px` }}
         >
@@ -52,7 +46,7 @@ export default function ReservedCard({
             </AvatarFallback>
           </Avatar>
 
-          <span className="text-white">{reserve.name}</span>
+          <span className="text-white">{reserve.userName}</span>
         </div>
       )
     );
