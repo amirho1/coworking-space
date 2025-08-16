@@ -1,4 +1,4 @@
-import { otp } from "@/app/register/actions";
+import { otp } from "@/app/register/otpConfirm";
 import { useActionState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
