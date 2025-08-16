@@ -1,14 +1,24 @@
 import { format } from "date-fns-jalali";
 
-/**
- * Get all dates for the week containing `date`.
- * @param {Date|string} date - Current date (Date or parseable string).
- * @param {number} weekStartsOn - 0 for Sunday-start, 1 for Monday-start.
- * @param {"date"|"ymd"|"iso"} as - Output type: Date objects, YYYY-MM-DD, or ISO strings.
- * @returns {{ weekdayIndex: number, dates: (Date|string)[] }}
- */
-export function getThisWeek(date = new Date(), weekStartsOn = 0, as = "ymd") {
-  // Normalize to a Date
+type WeekFormat = "ymd" | "iso" | "date";
+
+type DateType = Date | string | number;
+
+type StringOrDate = string | Date;
+
+interface ResStringDates<F extends StringOrDate = string> {
+  weekdayIndex: number;
+  dates: F[];
+}
+
+export function getThisWeek(date?: DateType, weekStartsOn?: number, as?: "ymd"): ResStringDates;
+export function getThisWeek(date?: DateType, weekStartsOn?: number, as?: "iso"): ResStringDates;
+export function getThisWeek(
+  date?: DateType,
+  weekStartsOn?: number,
+  as?: "date"
+): ResStringDates<Date>;
+export function getThisWeek(date: DateType = new Date(), weekStartsOn = 0, as: WeekFormat = "ymd") {
   const d = date instanceof Date ? date : new Date(date);
   // Local midnight to avoid DST/timezone hour shifts
   const localMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate());
