@@ -122,3 +122,21 @@ export function validDate(dateString: string | undefined) {
     return new Date();
   }
 }
+
+export function parseYmdWithZeroMonth(date: string): [number, number, number] | [] {
+  try {
+    return date
+      .split("-")
+      .slice(0, 3)
+      .map((str, index) => (index === 1 ? +str - 1 : +str)) as [number, number, number];
+  } catch {
+    return [];
+  }
+}
+
+export function convertJalaliISOToGregory(
+  date: [number, number, number],
+  formatStr = "yyyy-MM-dd"
+) {
+  return format(newDate(...date), formatStr);
+}
