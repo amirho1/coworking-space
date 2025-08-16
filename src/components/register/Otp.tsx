@@ -10,7 +10,7 @@ import { Step } from "./Index";
 import useTimer from "@/hooks/useTimer";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Resend from "./Resend";
-import { otpConfirm } from "@/app/register/actions";
+import { otpConfirm } from "@/app/register/otpConfirm";
 import ChangeEmailOrMobile from "./ChangeEmailOrMobile";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 

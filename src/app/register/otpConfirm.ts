@@ -2,7 +2,6 @@
 
 import axiosInstance from "@/api";
 import apiRoutes from "@/lib/apiRoutes";
-import { validateEmail } from "@/lib/utils";
 import axios from "axios";
 
 interface OtpState {

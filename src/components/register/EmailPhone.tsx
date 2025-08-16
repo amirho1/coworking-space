@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { startTransition, useActionState, useEffect, useRef } from "react";
-import { otp } from "@/app/register/actions";
+import { otp } from "@/app/register/otpConfirm";
 import { toast } from "sonner";
 import Link from "next/link";
 
