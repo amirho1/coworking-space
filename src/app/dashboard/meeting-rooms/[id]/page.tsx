@@ -19,11 +19,10 @@ export default async function page({
   const searchParamDate = (await searchParams).date;
 
   const date = validDate(
-    Array.isArray(searchParamDate) ? "" : searchParamDate ? searchParamDate : ""
+    Array.isArray(searchParamDate) ? undefined : searchParamDate ? searchParamDate : undefined
   );
 
   if (!isNaN(+id)) metadata.title = `تقویم اتاق جلسات  ${id}`;
-
   const reserves: Reserve[] = await getReserves(date, id);
 
   return (
