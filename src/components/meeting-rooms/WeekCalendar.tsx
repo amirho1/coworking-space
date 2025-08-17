@@ -12,6 +12,7 @@ import { getThisWeek } from "@/lib/week";
 import { useMemo } from "react";
 import ReservedCard from "./ReservedCard";
 import { Reserve } from "@/types";
+import { format } from "date-fns-jalali";
 
 interface ObjectDate {
   [key: string]: Reserve[];
@@ -29,10 +30,11 @@ export default function WeekCalendar({
 
   const objectData: ObjectDate = useMemo(
     () =>
-      reserves.reduce<ObjectDate>((obj, data) => {
-        if (obj[data.bookingDate]) {
-          obj[data.bookingDate].push(data);
-        } else obj[data.bookingDate] = [data];
+      reserves?.reduce<ObjectDate>((obj, data) => {
+        const persianISO = format(data.bookingDate, "yyyy-MM-dd");
+        if (obj[persianISO]) {
+          obj[persianISO].push(data);
+        } else obj[persianISO] = [data];
         return obj;
       }, {}),
     [reserves]
