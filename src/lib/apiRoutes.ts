@@ -9,6 +9,7 @@ const apiRoutes = {
   meetingRoom(id: string | number) {
     return `/meeting-room/${id}`;
   },
+  meetingRoomBook: "/meeting-room/book"
 };
 
 export default apiRoutes;
