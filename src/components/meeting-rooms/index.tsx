@@ -1,12 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Calendar } from "../ui/Calendar";
 import WeekCalendar from "./WeekCalendar";
-import { Button } from "../ui/button";
 import { Reserve } from "@/types";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { routes } from "@/lib/utils";
-import { format } from "date-fns";
+import { format } from "date-fns-jalali";
+import ReserveForm from "./ReserveForm";
 
 interface MeetingRoomProps extends React.HTMLAttributes<HTMLDivElement> {
   reserves: Reserve[];
@@ -14,25 +13,18 @@ interface MeetingRoomProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function MeetingRoomPage({ reserves, selectedDate }: MeetingRoomProps) {
-  const [currentDate, setCurrentDate] = useState(selectedDate);
+  const { id } = useParams();
   const router = useRouter();
-
-  const handleDateChange = (date: Date) => {
-    setCurrentDate(date);
-  };
+  const [date, setDate] = useState(selectedDate);
 
   useEffect(() => {
-    router.push(routes.meetingRoom(1, format(currentDate, "yyyy-MM-dd")));
-  }, [currentDate]);
+    if (id && !Array.isArray(id)) router.push(routes.meetingRoom(id, format(date, "yyyy-MM-dd")));
+  }, [date, id]);
 
   return (
     <div className="flex">
-      <div className="border-l w-[350px] p-4">
-        <Calendar mode="single" selected={currentDate} onDayClick={handleDateChange} />
-
-        <Button className="w-full">رزرو اتاق جلسه</Button>
-      </div>
-      <WeekCalendar currentDate={currentDate} reserves={reserves} />
+      <ReserveForm initialValue={selectedDate} onDateChange={setDate} />
+      <WeekCalendar currentDate={date} reserves={reserves} />
     </div>
   );
 }
