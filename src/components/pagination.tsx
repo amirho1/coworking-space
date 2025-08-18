@@ -48,13 +48,13 @@ export function PaginationComponent({
   count,
   pageSize,
 }: PaginationComponentProps) {
-  const totalPages = count < 10 ? 1 : Math.ceil(count / pageSize);
+  const totalPages = count && count < 10 ? 1 : Math.ceil(count / pageSize);
 
   return (
     <Pagination className="mt-6">
       <PaginationContent>
         <PaginationItem>
-          <Button disabled={currentPage === 1} variant="outline">
+          <Button disabled={currentPage === 1 || !count} variant="outline">
             <PaginationPrevious href={`${url}?page=${currentPage - 1}`} />
           </Button>
         </PaginationItem>
@@ -62,7 +62,7 @@ export function PaginationComponent({
         <Numbers url={url} currentPage={currentPage} totalPages={totalPages} />
 
         <PaginationItem>
-          <Button disabled={currentPage === totalPages} variant="outline">
+          <Button disabled={currentPage === totalPages || !count} variant="outline">
             <PaginationNext href={`${url}?page=${currentPage + 1}`} />
           </Button>
         </PaginationItem>
