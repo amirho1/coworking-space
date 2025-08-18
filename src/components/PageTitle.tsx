@@ -12,7 +12,7 @@ const titles = {
 export default function PageTitle() {
   const pathname = usePathname();
   return (
-    <h1 className="text-base font-medium">
+    <h1 className="text-base font-medium z-30">
       {titles[pathname.split("/").pop() as keyof typeof titles]}
     </h1>
   );
