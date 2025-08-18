@@ -11,88 +11,14 @@ import {
 } from "@/components/ui/table";
 import { cn, routes } from "@/lib/utils";
 
-const mockData = [
-  {
-    id: 1,
-    title: "صورتحساب 1",
-    amount: 100000,
-    status: "paid",
-    date: "2021-01-01",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 2,
-    title: "صورتحساب 2",
-    amount: 200000,
-    status: "unpaid",
-    date: "2021-01-02",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 3,
-    title: "صورتحساب 3",
-    amount: 300000,
-    status: "paid",
-    date: "2021-01-03",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 4,
-    title: "صورتحساب 4",
-    amount: 400000,
-    status: "unpaid",
-    date: "2021-01-04",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 5,
-    title: "صورتحساب 5",
-    amount: 500000,
-    status: "paid",
-    date: "2021-01-05",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 6,
-    title: "صورتحساب 6",
-    amount: 600000,
-    status: "unpaid",
-    date: "2021-01-06",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 7,
-    title: "صورتحساب 7",
-    amount: 700000,
-    status: "paid",
-    date: "2021-01-07",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 8,
-    title: "صورتحساب 8",
-    amount: 800000,
-    status: "unpaid",
-    date: "2021-01-08",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 9,
-    title: "صورتحساب 9",
-    amount: 900000,
-    status: "paid",
-    date: "2021-01-09",
-    details: "شرح صورتحساب 1",
-  },
-  {
-    id: 10,
-    title: "صورتحساب 10",
-    amount: 1000000,
-    status: "unpaid",
-    date: "2021-01-10",
-    details: "شرح صورتحساب 1",
-  },
-];
+interface Invoice {
+  id: 1;
+  title: string;
+  amount: number;
+  status: string;
+  date: string;
+  details: string;
+}
 
 const statuses = {
   paid: "پرداخت شده",
@@ -101,7 +27,7 @@ const statuses = {
 
 export default async function page({ searchParams }: { searchParams: Promise<{ page: string }> }) {
   const { page } = await searchParams;
-
+  const invoices: Invoice[] = [];
   return (
     <div>
       <Table>
@@ -117,7 +43,7 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockData.map(item => (
+          {invoices.map(item => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>{item.title}</TableCell>
@@ -136,6 +62,8 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
           ))}
         </TableBody>
       </Table>
+
+      {!!invoices.length || <div className="m-auto mt-4 w-fit">هیچ صورت حسابی ندارید.</div>}
 
       <PaginationComponent
         url={routes.invoices}
