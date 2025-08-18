@@ -58,10 +58,18 @@ export default function WeekCalendar({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {hours.map((hour, i) => (
-          <TableRow key={i} className="p-0 relative">
-            <TableCell className="w-[40px] border-l">{`${i < 10 ? `0${i}` : i}:00`}</TableCell>
+        {hours.map((hour, hourIndex) => (
+          <TableRow key={hourIndex} className="p-0 relative">
+            <TableCell className="w-[40px] border-l">{`${
+              hourIndex < 10 ? `0${hourIndex}` : hourIndex
+            }:00`}</TableCell>
             {hour.map((currentDate: string, index: number) => {
+              const currentDayReserves = objectData[currentDate];
+              const regex = new RegExp(`${hourIndex >= 10 ? "" : 0}${hourIndex}:`);
+              const reserves = currentDayReserves?.filter(({ startTime }) =>
+                regex.test(startTime.toString())
+              );
+
               return (
                 <TableCell key={index} className="p-0">
                   <div
@@ -70,7 +78,15 @@ export default function WeekCalendar({
                       weekDayIndex === index ? "bg-muted" : "bg-transparent"
                     )}
                   >
-                    <ReservedCard currentDate={currentDate} hourIndex={i} objectData={objectData} />
+                    {reserves?.map(reserve => (
+                      <ReservedCard
+                        currentDate={currentDate}
+                        hourIndex={hourIndex}
+                        objectData={objectData}
+                        key={reserve.id}
+                        {...reserve}
+                      />
+                    ))}
                   </div>
                 </TableCell>
               );
