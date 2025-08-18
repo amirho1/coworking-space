@@ -17,7 +17,7 @@ export default async function MeetingRoomsPage() {
   const rooms: MeetingRoom[] = (await axiosInstance.get(apiRoutes.meetingRooms)).data.data;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full overflow-auto">
       {/* Room Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {rooms.map(room => (

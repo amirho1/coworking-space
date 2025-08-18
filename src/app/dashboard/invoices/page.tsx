@@ -139,7 +139,8 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
 
       <PaginationComponent
         url={routes.invoices}
-        totalPages={10}
+        count={0}
+        pageSize={10}
         currentPage={page ? parseInt(page) : 1}
       />
     </div>
