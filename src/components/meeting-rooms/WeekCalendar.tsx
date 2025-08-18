@@ -41,14 +41,14 @@ export default function WeekCalendar({
   );
 
   return (
-    <Table>
-      <TableHeader>
+    <Table containerProps={{ className: "h-full overflow-auto w-full relative" }}>
+      <TableHeader className="sticky bg-gray-100 z-30">
         <TableRow>
           {persianWeekDays.map((day, index) => (
             <TableHead
               className={cn(
-                "text-start",
-                weekDayIndex + 1 === index ? "bg-muted" : "bg-transparent"
+                "text-start pl-1 sticky top-0 bg-gray-100 z-30",
+                index === 0 ? "min-w-[50px]" : "min-w-28"
               )}
               key={day}
             >

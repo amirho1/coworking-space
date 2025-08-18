@@ -22,7 +22,7 @@ export default function MeetingRoomPage({ reserves, selectedDate }: MeetingRoomP
   }, [date, id]);
 
   return (
-    <div className="flex">
+    <div className="flex h-[calc(100vh-150px)] ">
       <ReserveForm initialValue={selectedDate} onDateChange={setDate} />
       <WeekCalendar currentDate={date} reserves={reserves} />
     </div>

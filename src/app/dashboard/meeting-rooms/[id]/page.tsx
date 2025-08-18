@@ -26,9 +26,9 @@ export default async function page({
   const reserves: Reserve[] = await getReserves(date, id);
 
   return (
-    <div>
+    <>
       <h1 className="text-2xl font-bold mb-4">تقویم اتاق جلسه {id} </h1>
       <MeetingRoomsPage reserves={reserves} selectedDate={date} />
-    </div>
+    </>
   );
 }

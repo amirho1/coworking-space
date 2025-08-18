@@ -21,7 +21,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
 
       <SidebarInset>
         <SiteHeader />
-        <div className="p-5">{children}</div>
+        <div className="p-5 pb-0 h-full">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
