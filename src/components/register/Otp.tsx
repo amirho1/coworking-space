@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
@@ -23,6 +23,7 @@ interface OtpProps {
 
 export default function OTPForm({ setStep, datetime, email, mobile }: OtpProps) {
   const [internalDatetime, setInternalDatetime] = useState(datetime);
+  const formRef = useRef<null | HTMLFormElement>(null);
   const [state, formAction, isLoading] = useActionState(otpConfirm, {
     error: null,
     success: false,
@@ -42,9 +43,11 @@ export default function OTPForm({ setStep, datetime, email, mobile }: OtpProps) 
   }, [state]);
 
   function handleOtpChange(string: string) {
-    const containsOnlyNumbers = /^\d+$/.test(string);
-    if (string.length === 6) {
+    if (string.length === 6 && formRef.current) {
       setIsSubmitButtonDisabled(false);
+
+      const formData = new FormData(formRef.current);
+      startTransition(() => handleSubmit(formData));
     } else {
       setIsSubmitButtonDisabled(true);
     }
@@ -66,7 +69,7 @@ export default function OTPForm({ setStep, datetime, email, mobile }: OtpProps) 
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <form action={handleSubmit}>
+          <form action={handleSubmit} ref={formRef}>
             <div className="flex justify-center" dir="ltr">
               <InputOTP
                 maxLength={6}
