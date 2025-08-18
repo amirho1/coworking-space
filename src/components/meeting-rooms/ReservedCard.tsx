@@ -62,7 +62,7 @@ export default function ReservedCard({
             top: `${top}px`,
           }}
         >
-          <div className="absolute left-0 top-0 w-full h-full bg-gray-300 opacity-50 z-20"></div>
+          <div className="absolute left-0 top-0 w-full h-full bg-gray-300 opacity-50 z-20 hover:opacity-0"></div>
           <CardContent className="w-full h-full p-0 overflow-hidden flex justify-center items-center">
             <Avatar className="w-8 h-8 m-auto block">
               <AvatarImage src={avatarUrl} />
