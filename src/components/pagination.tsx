@@ -9,9 +9,10 @@ import {
 import { Button } from "./ui/button";
 
 type PaginationComponentProps = {
-  totalPages: number;
   currentPage: number;
   url: string;
+  pageSize: number;
+  count: number;
 };
 
 interface NumbersProps {
@@ -41,7 +42,14 @@ function Numbers({ beforeAfterCount = 2, currentPage, totalPages, url }: Numbers
   return arr;
 }
 
-export function PaginationComponent({ url, totalPages, currentPage }: PaginationComponentProps) {
+export function PaginationComponent({
+  url,
+  currentPage,
+  count,
+  pageSize,
+}: PaginationComponentProps) {
+  const totalPages = count < 10 ? 1 : Math.ceil(count / pageSize);
+
   return (
     <Pagination className="mt-6">
       <PaginationContent>
