@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 import { frontAPIs, routes, validatePhone } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -39,9 +40,14 @@ export default function LoginForm() {
       credentials: "include",
       headers: { "Content-Type": "application/json" },
     })
-      .then(() => {
-        router.replace(routes.services);
+      .then(async res => {
+        const data = await res.json();
+        if (data.success) {
+          router.replace(routes.services);
+          toast.success("با موفقتی وارد شدید");
+        } else toast.error(data.error);
       })
+
       .finally(() => {
         setLoading(false);
       });
