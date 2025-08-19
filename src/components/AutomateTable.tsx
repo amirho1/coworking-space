@@ -45,10 +45,10 @@ export default function AutomateTable<
               {keys?.map((key, index, sort) => {
                 const params = { item, key, index, sort };
 
-                return renderItem ? (
-                  <TableCell key={index}>{renderItem(params)}</TableCell>
-                ) : (
-                  item[key as keyof DataType]
+                return (
+                  <TableCell key={index}>
+                    {renderItem ? renderItem(params) : item[key as keyof DataType]}
+                  </TableCell>
                 );
               })}
             </TableRow>
