@@ -1,38 +1,14 @@
 import { NextResponse, NextRequest } from "next/server";
-import { authRoutes, deleteAuthCookies, routes, setAuthCookies } from "@/lib/utils";
+import { authRoutes, deleteAuthCookies, routes } from "@/lib/utils";
 import checkUserLogin from "@/api/checkUserLogin";
-import { checkTokenExpiration, getToken } from "./lib/token";
-import axiosInstance from "./api";
-import apiRoutes from "./lib/apiRoutes";
+import { checkTokenExpiration } from "./lib/token";
+import rotateTokens from "./middleware/refreshTokens";
 
 /* ------------------------------------------------------------------ */
 /* Small helpers — keep main flow readable                            */
 /* ------------------------------------------------------------------ */
-const redirect = (to: string, req: NextRequest) => NextResponse.redirect(new URL(to, req.url));
-
-async function rotateTokens(req: NextRequest) {
-  const { refreshToken } = await getToken();
-
-  try {
-    const res = NextResponse.next();
-    const {
-      data: {
-        data: { accessToken: newToken, refreshToken: newRefresh },
-      },
-    } = await axiosInstance.post(apiRoutes.refreshToken, {
-      refreshToken: refreshToken?.value,
-    });
-
-    setAuthCookies({ res, token: newToken, refreshToken: newRefresh });
-
-    return res;
-  } catch {
-    const res = redirect(routes.login, req); // cookies will be mutated on success
-
-    deleteAuthCookies(res);
-    return res;
-  }
-}
+export const redirect = (to: string, req: NextRequest) =>
+  NextResponse.redirect(new URL(to, req.url));
 
 /* ------------------------------------------------------------------ */
 /* Main middleware                                                    */
