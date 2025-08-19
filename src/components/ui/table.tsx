@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-interface TableProps extends React.ComponentProps<"table"> {
+export interface TableProps extends React.ComponentProps<"table"> {
   containerProps?: React.ComponentProps<"div">;
 }
 
