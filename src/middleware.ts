@@ -3,13 +3,13 @@ import { authRoutes, deleteAuthCookies, routes } from "@/lib/utils";
 import checkUserLogin from "@/api/checkUserLogin";
 import { checkTokenExpiration } from "./lib/token";
 import rotateTokens from "./middleware/refreshTokens";
+import authorization from "./middleware/authorization";
 
 /* ------------------------------------------------------------------ */
 /* Small helpers — keep main flow readable                            */
 /* ------------------------------------------------------------------ */
 export const redirect = (to: string, req: NextRequest) =>
   NextResponse.redirect(new URL(to, req.url));
-
 /* ------------------------------------------------------------------ */
 /* Main middleware                                                    */
 /* ------------------------------------------------------------------ */
@@ -37,14 +37,12 @@ export async function middleware(req: NextRequest) {
 
     return res;
   }
-
   /* --- 4. Route guards when logged-in ----------------------------- */
   if (path === routes.home || authRoutes.includes(path)) {
     return redirect(routes.services, req);
   }
-
-  /* --- 5. All good ------------------------------------------------ */
-  return NextResponse.next();
+  /** --- 5. check user access */
+  return authorization(req);
 }
 
 export const config = {
