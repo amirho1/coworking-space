@@ -1,14 +1,7 @@
+import AutomateTable, { RenderItemProps } from "@/components/AutomateTable";
 import { PaginationComponent } from "@/components/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { cn, routes } from "@/lib/utils";
 
 interface Invoice {
@@ -20,48 +13,38 @@ interface Invoice {
   details: string;
 }
 
+type columns = keyof Invoice | "payment";
+
 const statuses = {
   paid: "پرداخت شده",
   unpaid: "پرداخت نشده",
 };
 
+const tableHeads = ["شناسه", "عنوان", "شرح صورت حساب", "مبلغ", "وضعیت", "تاریخ", "عملیات"];
+const sort: columns[] = ["id", "title", "details", "amount", "status", "payment"];
+
 export default async function page({ searchParams }: { searchParams: Promise<{ page: string }> }) {
   const { page } = await searchParams;
   const invoices: Invoice[] = [];
+
+  function renderItem({ key, item }: RenderItemProps<Invoice, columns>) {
+    switch (key) {
+      case "status":
+        return (
+          <Badge className={cn(item.status === "paid" ? "bg-green-500" : "bg-red-500")}>
+            {statuses[item.status as keyof typeof statuses]}
+          </Badge>
+        );
+      case "payment":
+        return <Button disabled={item.status === "paid"}>پرداخت</Button>;
+      default:
+        return item[key];
+    }
+  }
+
   return (
     <div>
-      <Table>
-        <TableHeader>
-          <TableRow className="[&>th]:text-right">
-            <TableHead>شناسه</TableHead>
-            <TableHead>عنوان</TableHead>
-            <TableHead>شرح صورت حساب</TableHead>
-            <TableHead>مبلغ</TableHead>
-            <TableHead>وضعیت</TableHead>
-            <TableHead>تاریخ</TableHead>
-            <TableHead>عملیات</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map(item => (
-            <TableRow key={item.id}>
-              <TableCell>{item.id}</TableCell>
-              <TableCell>{item.title}</TableCell>
-              <TableCell>{item.details}</TableCell>
-              <TableCell>{item.amount}</TableCell>
-              <TableCell>
-                <Badge className={cn(item.status === "paid" ? "bg-green-500" : "bg-red-500")}>
-                  {statuses[item.status as keyof typeof statuses]}
-                </Badge>
-              </TableCell>
-              <TableCell>{item.date}</TableCell>
-              <TableCell>
-                <Button disabled={item.status === "paid"}>پرداخت</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <AutomateTable data={invoices} heads={tableHeads} renderItem={renderItem} sort={sort} />
 
       {!!invoices.length || <div className="m-auto mt-4 w-fit">هیچ صورت حسابی ندارید.</div>}
 
