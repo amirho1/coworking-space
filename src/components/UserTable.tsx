@@ -15,53 +15,57 @@ const heads = [
   "وضعیت",
   "اقدامات",
 ];
-const sort: (keyof User | "actions")[] = [
+
+type columns =
+  | "id"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "roles"
+  | "phoneNumber"
+  | "nationalCode"
+  | "isActive"
+  | "actions";
+
+const sort: columns[] = [
   "id",
-  "name",
-  "lastname",
+  "firstName",
+  "lastName",
   "email",
-  "role",
+  "roles",
   "phoneNumber",
-  "nationalID",
-  "status",
+  "nationalCode",
+  "isActive",
   "actions",
 ];
 
-function renderItem({ key, item }: RenderItemProps<User>) {
+function renderItem({ key, item }: RenderItemProps<User, columns>) {
   switch (key) {
-    case "name":
+    case "firstName":
       return (
         <div className="flex items-center gap-2">
           <Avatar>
-            <AvatarImage src={item.avatar} alt={`${item.name} ${item.lastname}`} />
+            <AvatarImage src={item.avatar} alt={`${item.firstName} ${item.lastName}`} />
             <AvatarFallback>
-              {item.name.charAt(0)}
-              {item.lastname.charAt(0)}
+              {item.displayName.charAt(0)}
+              {item.lastName?.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          {item.name}
+          {item.firstName}
         </div>
       );
-    case "status":
+    case "isActive":
       return (
         <Badge
-          className={
-            item.status === "confirmed"
-              ? "bg-green-500"
-              : item.status === "rejected"
-              ? "bg-red-600"
-              : "bg-gray-300"
-          }
+          className={item.isActive ? "bg-green-500" : item.isActive ? "bg-red-600" : "bg-gray-300"}
         >
-          {item.status === "confirmed"
-            ? "تایید شده"
-            : item.status === "rejected"
-            ? "رد شده"
-            : "در انتظار تایید"}
+          {item.isActive ? "تایید شده" : item.isActive ? "رد شده" : "در انتظار تایید"}
         </Badge>
       );
+    case "roles":
+      return "";
     case "actions":
-      return <Actions id={item.id} name={item.name} />;
+      return <Actions id={item.id} name={item.firstName} />;
     default:
       return item[key];
   }
@@ -69,7 +73,7 @@ function renderItem({ key, item }: RenderItemProps<User>) {
 
 export default function UserTable({ users, ...props }: { users?: User[] }) {
   return (
-    <AutomateTable<User>
+    <AutomateTable<User, columns>
       heads={heads}
       data={users || []}
       sort={sort}

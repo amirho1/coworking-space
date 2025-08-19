@@ -7,16 +7,26 @@ import apiRoutes from "@/lib/apiRoutes";
 import { routes } from "@/lib/utils";
 
 export interface User {
-  name: string;
   id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  displayName: string;
   avatar: string;
-  lastname: string;
   email: string;
-  role: string;
+  nationalCode: string;
   phoneNumber: string;
-  nationalID: string;
-  status: string;
-  actions: undefined;
+  isActive: boolean;
+  lastLoggedIn: string;
+  lockoutEnabled: boolean;
+  lockoutEnd: string;
+  roles: [
+    {
+      id: number;
+      name: string;
+      description: string;
+    }
+  ];
 }
 
 interface Role {
@@ -48,11 +58,12 @@ export default async function page({
         params: {
           pageNumber: page,
           pageSize,
+          search,
         },
       })
-    ).data;
-  } catch (error) {
-    console.error(error);
+    ).data.data;
+  } catch (error: any) {
+    console.error(error?.response?.data);
   }
 
   return (
