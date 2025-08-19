@@ -21,6 +21,7 @@ export const routes = {
   services: "/dashboard/services",
   forgotPassword: "/auth/forgot-password",
   meetingRooms: "/dashboard/meeting-rooms",
+  bookedMeetingRooms: "/dashboard/meeting-rooms/booked",
   users: "/dashboard/users",
   userDetails: (id: number) => `/dashboard/users/${id}`,
   userMeetingRooms: (id: number) => `/dashboard/users/meeting-rooms/${id}`,

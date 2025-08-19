@@ -10,7 +10,8 @@ const apiRoutes = {
     return `/meeting-room/${id}`;
   },
   meetingRoomBook: "/meeting-room/book",
-  users: "identity/users/search",
+  users: "/identity/users/search",
+  personalBookings: "/meeting-room/bookings",
 };
 
 export default apiRoutes;
