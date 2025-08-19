@@ -1,4 +1,3 @@
-import { JSX } from "react/jsx-runtime";
 import {
   Table,
   TableBody,
@@ -9,32 +8,30 @@ import {
   TableRow,
 } from "./ui/table";
 
-export interface RenderItemProps<DataType> {
+export interface RenderItemProps<DataType, SortKeys = keyof DataType> {
   item: DataType;
-  key: keyof DataType;
+  key: SortKeys;
   index: number;
-  sort: (keyof DataType)[];
+  sort: SortKeys[];
 }
 
 export type RenderItem<DataType> = (param: RenderItemProps<DataType>) => any;
 
-interface AutoMateTableProps<DataType extends Record<string, any>> extends TableProps {
+interface AutomateTableProps<DataType extends Record<string, any>, SortKeys = keyof DataType>
+  extends TableProps {
   heads: string[];
   data: DataType[];
-  sort?: (keyof DataType)[];
+  sort: SortKeys[];
   renderItem?: RenderItem<DataType>;
 }
 
-export default function AutomateTable<DataType extends Record<string, any>>({
-  heads,
-  data,
-  sort,
-  renderItem,
-  ...props
-}: AutoMateTableProps<DataType>) {
+export default function AutomateTable<
+  DataType extends Record<string, any>,
+  SortKeys = keyof DataType
+>({ heads, data, sort, renderItem, ...props }: AutomateTableProps<DataType, SortKeys>) {
   const tableHeads = heads.map((name, index) => <TableHead key={index}> {name}</TableHead>);
 
-  const keys = sort || (data[0] ? Object.keys(data[0]) : []);
+  const keys = sort;
 
   return (
     <Table className="mt-6" {...props}>
@@ -51,7 +48,7 @@ export default function AutomateTable<DataType extends Record<string, any>>({
                 return renderItem ? (
                   <TableCell key={index}>{renderItem(params)}</TableCell>
                 ) : (
-                  item[key]
+                  item[key as keyof DataType]
                 );
               })}
             </TableRow>
