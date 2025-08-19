@@ -15,14 +15,16 @@ export interface RenderItemProps<DataType, SortKeys = keyof DataType> {
   sort: SortKeys[];
 }
 
-export type RenderItem<DataType> = (param: RenderItemProps<DataType>) => any;
+export type RenderItem<DataType, SortKeys = keyof DataType> = (
+  param: RenderItemProps<DataType, SortKeys>
+) => any;
 
 interface AutomateTableProps<DataType extends Record<string, any>, SortKeys = keyof DataType>
   extends TableProps {
   heads: string[];
   data: DataType[];
   sort: SortKeys[];
-  renderItem?: RenderItem<DataType>;
+  renderItem?: RenderItem<DataType, SortKeys>;
 }
 
 export default function AutomateTable<
@@ -30,8 +32,6 @@ export default function AutomateTable<
   SortKeys = keyof DataType
 >({ heads, data, sort, renderItem, ...props }: AutomateTableProps<DataType, SortKeys>) {
   const tableHeads = heads.map((name, index) => <TableHead key={index}> {name}</TableHead>);
-
-  const keys = sort;
 
   return (
     <Table className="mt-6" {...props}>
@@ -42,7 +42,7 @@ export default function AutomateTable<
         {data?.map((item, index) => {
           return (
             <TableRow key={index}>
-              {keys?.map((key, index, sort) => {
+              {sort?.map((key, index, sort) => {
                 const params = { item, key, index, sort };
 
                 return (
