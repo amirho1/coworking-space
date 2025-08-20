@@ -13,38 +13,61 @@ import {
 import { routes } from "@/lib/utils";
 import { User } from "@/types";
 
-const data = {
-  navMain: [
-    {
-      name: "سرویس ها",
-      href: routes.services,
-      icon: "mdi:seat",
-    },
-    {
-      name: "اتاق‌های جلسه",
-      href: routes.meetingRooms,
-      icon: "mdi:virtual-meeting",
-    },
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: User;
+}
 
-    {
-      name: "صورتحساب ها",
-      href: routes.invoices,
-      icon: "mdi:invoice",
-    },
+export interface NavBarTree {
+  name: string;
+  href: string;
+  icon?: string;
+  items?: NavBarTree[];
+}
 
+export async function AppSidebar({ user, ...props }: AppSidebarProps) {
+  const data: { navMain: NavBarTree[] } = {
+    navMain: [
+      {
+        name: "سرویس ها",
+        href: routes.services,
+        icon: "mdi:seat",
+      },
+      {
+        name: "جلسات",
+        href: routes.meetingRooms,
+        icon: "mdi:virtual-meeting",
+        items: [
+          {
+            name: "اتاق ها",
+            href: routes.meetingRooms,
+          },
+          {
+            name: "رزرو های من",
+            href: routes.bookedMeetingRooms,
+          },
+        ],
+      },
+
+      {
+        name: "صورتحساب ها",
+        href: routes.invoices,
+        icon: "mdi:invoice",
+      },
+    ],
+  };
+
+  const adminNavMainRoutes = [
     {
       name: "لیست کاربران",
       href: routes.users,
       icon: "mdi:users",
     },
-  ],
-};
+  ];
 
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  user: User;
-}
+  if (user?.jwtClaim?.role && user?.jwtClaim?.role === "Admin") {
+    adminNavMainRoutes.forEach(route => data.navMain.push(route));
+  }
 
-export async function AppSidebar({ user, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

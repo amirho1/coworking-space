@@ -1,9 +1,12 @@
+import { JWTPayload } from "jose";
+
 export interface User {
   firstName: string;
   userName: string;
   lastName: string;
   email: string;
   avatar: string;
+  jwtClaim: JWTPayload | undefined;
 }
 
 export interface Reserve {

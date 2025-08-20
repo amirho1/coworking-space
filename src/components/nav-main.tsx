@@ -11,46 +11,49 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import NavTree from "./NavTree";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    name: string;
-    href: string;
-    icon?: string;
-  }[];
-}) {
+interface Item {
+  name: string;
+  href: string;
+  icon?: string;
+}
+
+export function MenuItem({ name, href, icon }: Item) {
   const pathname = usePathname();
+  const isActive = pathname === href;
 
+  return (
+    <SidebarMenuItem key={name}>
+      <Link
+        key={name}
+        href={href}
+        className="flex items-center  text-sm font-medium rounded-md transition-colors gap-2 w-full h-full"
+      >
+        <SidebarMenuButton
+          tooltip={name}
+          className={cn(
+            "transition-colors cursor-pointer",
+            isActive
+              ? "bg-sidebar-accent"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+          )}
+        >
+          {icon && <Icon icon={icon} className="h-5 w-5" />}
+          <span className="text-sm">{name}</span>
+        </SidebarMenuButton>
+      </Link>
+    </SidebarMenuItem>
+  );
+}
+
+export function NavMain({ items }: { items: Item[] }) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col">
         <SidebarMenu>
           {items.map(item => {
-            const isActive = pathname === item.href;
-            return (
-              <SidebarMenuItem key={item.name}>
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="flex items-center  text-sm font-medium rounded-md transition-colors gap-2 w-full h-full"
-                >
-                  <SidebarMenuButton
-                    tooltip={item.name}
-                    className={cn(
-                      "transition-colors cursor-pointer",
-                      isActive
-                        ? "bg-sidebar-accent"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                    )}
-                  >
-                    {item.icon && <Icon icon={item.icon} className="h-5 w-5" />}
-                    <span className="text-sm">{item.name}</span>
-                  </SidebarMenuButton>
-                </Link>
-              </SidebarMenuItem>
-            );
+            return <NavTree {...item} key={item.name} />
           })}
         </SidebarMenu>
       </SidebarGroupContent>
