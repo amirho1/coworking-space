@@ -15,7 +15,17 @@ export interface MeetingRoomReserve {
   bookingStatusTitle: string;
 }
 
-const sort = [
+type column =
+  | "id"
+  | "roomName"
+  | "bookingDate"
+  | "persianDate"
+  | "startTime"
+  | "endTime"
+  | "bookingStatus"
+  | "bookingStatusTitle";
+
+const sort: column[] = [
   "id",
   "roomName",
   "bookingDate",
