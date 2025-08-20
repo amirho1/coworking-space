@@ -22,7 +22,6 @@ type column =
   | "persianDate"
   | "startTime"
   | "endTime"
-  | "bookingStatus"
   | "bookingStatusTitle";
 
 const sort: column[] = [
@@ -32,7 +31,6 @@ const sort: column[] = [
   "persianDate",
   "startTime",
   "endTime",
-  "bookingStatus",
   "bookingStatusTitle",
 ];
 
@@ -43,7 +41,6 @@ const heads = [
   "تاریخ شمسی",
   "زمان شروع",
   "زمان پایان",
-  "وضعیت رزرو",
   "عنوان وضعیت رزرو",
 ];
 
@@ -71,19 +68,9 @@ export default async function Personal({
     console.error(error);
   }
 
-  function renderItem({ item, key }: RenderItemProps<MeetingRoomReserve>) {
-    const statuses = ["موفق", "ناموفق", "انجام شده"];
-    switch (key) {
-      case "bookingStatus":
-        return <span>{statuses[item[key]]}</span>;
-      default:
-        return item[key];
-    }
-  }
-
   return (
     <div>
-      <AutomateTable sort={sort} heads={heads} data={res.data} renderItem={renderItem} />
+      <AutomateTable sort={sort} heads={heads} data={res.data} />
       <PaginationComponent
         count={res?.count}
         pageSize={pageSize}
