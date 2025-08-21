@@ -36,8 +36,10 @@ interface Role {
 }
 
 interface Data {
-  users: User[];
-  roles: Role[];
+  data: {
+    users: User[];
+    roles: Role[];
+  };
   count: number;
   isSuccess: boolean;
   message: string;
@@ -58,10 +60,10 @@ export default async function page({
         params: {
           pageNumber: page,
           pageSize,
-          search,
+          searchText: search,
         },
       })
-    ).data.data;
+    ).data;
   } catch (error: any) {
     console.error(error?.response?.data);
   }
@@ -69,7 +71,7 @@ export default async function page({
   return (
     <div>
       <Search defaultValue={search} />
-      <UserTable users={data?.users} />
+      <UserTable users={data?.data?.users} />
 
       {data?.count && (
         <PaginationComponent
