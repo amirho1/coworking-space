@@ -36,10 +36,14 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
             <Icon icon="mdi:dots-vertical" />
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="start">
-            {isUserActive || (
-              <DropdownMenuItem>
-                <DialogTrigger className="cursor-pointer">ردکردن عضویت کاربر</DialogTrigger>
+          <DropdownMenuContent align="start" className="[&>*]:justify-end">
+            {isUserActive ? (
+              <DropdownMenuItem className="bg-red-500 text-white">
+                <DialogTrigger className="cursor-pointer ">غیر فعال کردن کاربر </DialogTrigger>
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem className="bg-green-500 text-white">
+                <DialogTrigger className="cursor-pointer">فعال کردن کاربر</DialogTrigger>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem>
