@@ -4,6 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Actions from "./users/Actions";
 import { Badge } from "./ui/badge";
 
+const roles = {
+  Admin: "ادمین",
+  User: "کاربر معمولی",
+};
+
 const heads = [
   "شناسه",
   "اسم",
@@ -63,7 +68,9 @@ function renderItem({ key, item }: RenderItemProps<User, columns>) {
         </Badge>
       );
     case "roles":
-      return "";
+      const adminRole: "Admin" | "User" = item[key][0].name as any;
+
+      return roles[adminRole];
     case "actions":
       return <Actions id={item.id} name={item.firstName} />;
     default:
