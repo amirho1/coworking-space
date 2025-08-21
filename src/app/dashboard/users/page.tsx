@@ -23,7 +23,7 @@ export interface User {
   roles: [
     {
       id: number;
-      name: string;
+      name: "Admin" | "User";
       description: string;
     }
   ];
