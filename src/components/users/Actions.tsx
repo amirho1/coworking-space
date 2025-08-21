@@ -36,10 +36,12 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
             <Icon icon="mdi:dots-vertical" />
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="start" className="[&>*]:justify-end">
+          <DropdownMenuContent align="start" className="[&>*]:p-0 [&>*>*]:p-2">
             {isUserActive ? (
-              <DropdownMenuItem className="bg-red-500 text-white">
-                <DialogTrigger className="cursor-pointer ">غیر فعال کردن کاربر </DialogTrigger>
+              <DropdownMenuItem className="text-white bg-red-500 justify-end">
+                <DialogTrigger className="cursor-pointer text-right ">
+                  غیر فعال کردن کاربر
+                </DialogTrigger>
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem className="bg-green-500 text-white">
@@ -47,13 +49,19 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
               </DropdownMenuItem>
             )}
             <DropdownMenuItem>
-              <Link href={routes.userDetails(id)}>جزئیات</Link>
+              <Link className="w-full text-right" href={routes.userDetails(id)}>
+                جزئیات
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={routes.userServices(id)}>سرویس ها</Link>
+              <Link className="w-full text-right" href={routes.userServices(id)}>
+                سرویس ها
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={routes.userMeetingRooms(id)}>جزئیات اتاق میتینگ ها</Link>
+              <Link className="w-full text-right" href={routes.userMeetingRooms(id)}>
+                جزئیات اتاق میتینگ ها
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
