@@ -72,7 +72,7 @@ function renderItem({ key, item }: RenderItemProps<User, columns>) {
 
       return roles[adminRole];
     case "actions":
-      return <Actions id={item.id} name={item.firstName} />;
+      return <Actions isUserActive={item.isActive} id={item.id} name={item.firstName} />;
     default:
       return item[key];
   }
