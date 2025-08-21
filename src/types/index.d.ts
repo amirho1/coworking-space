@@ -19,3 +19,5 @@ export interface Reserve {
   userName: string;
   avatarUrl: string;
 }
+
+export type Primitives = number | string | null | boolean | undefined;
