@@ -9,6 +9,9 @@ const apiRoutes = {
   meetingRoom(id: string | number) {
     return `/meeting-room/${id}`;
   },
+  user(id: string | number) {
+    return `/identity/users/${id}`;
+  },
   meetingRoomBook: "/meeting-room/book",
   users: "/identity/users/",
   personalBookings: "/meeting-room/bookings",
