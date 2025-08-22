@@ -12,6 +12,7 @@ import Link from "next/link";
 import { routes } from "@/lib/utils";
 import { Dialog, DialogContent } from "../ui/dialog";
 import StatusActiveDialogForm from "./StatusActiveDialogForm";
+import { useRouter } from "next/navigation";
 
 interface ActionsProps extends React.ComponentProps<typeof DropdownMenu> {
   id: number;
@@ -21,9 +22,14 @@ interface ActionsProps extends React.ComponentProps<typeof DropdownMenu> {
 
 export default function Actions({ id, name, isUserActive, ...props }: ActionsProps) {
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   function openDialog() {
     setOpen(true);
+  }
+
+  function handleStatusActiveSuccess() {
+    setOpen(false);
+    router.refresh();
   }
 
   return (
@@ -70,7 +76,7 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
             name={name}
             id={id}
             isActive={isUserActive}
-            onSuccess={() => setOpen(false)}
+            onSuccess={handleStatusActiveSuccess}
           />
         </DialogContent>
       </Dialog>
