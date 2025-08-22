@@ -24,11 +24,6 @@ export default async function Profile() {
           <div className="flex items-center justify-center gap-2 font-semibold text-2xl">
             {data.data.firstName} {data.data.lastName}
           </div>
-          <div className="mt-2 flex flex-wrap justify-center gap-4 text-muted-foreground text-sm">
-            <span className="flex items-center gap-1" title="Join date">
-              📅 عضویت در مارس ۲۰۱۷
-            </span>
-          </div>
         </CardContent>
       </Card>
 
