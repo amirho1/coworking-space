@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,20 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { RejectDialog } from "./RejectDialog";
 import Link from "next/link";
 import { routes } from "@/lib/utils";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+import { Dialog, DialogContent } from "../ui/dialog";
+import DeActivateDialogForm from "./DeActivateDialogForm";
 
 interface ActionsProps extends React.ComponentProps<typeof DropdownMenu> {
   id: number;
@@ -28,9 +20,15 @@ interface ActionsProps extends React.ComponentProps<typeof DropdownMenu> {
 }
 
 export default function Actions({ id, name, isUserActive, ...props }: ActionsProps) {
+  const [open, setOpen] = useState(false);
+
+  function openDialog() {
+    setOpen(true);
+  }
+
   return (
     <div>
-      <Dialog>
+      <Dialog open={open}>
         <DropdownMenu {...props}>
           <DropdownMenuTrigger asChild>
             <Icon icon="mdi:dots-vertical" />
@@ -38,14 +36,12 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
 
           <DropdownMenuContent align="start" className="[&>*]:p-0 [&>*>*]:p-2">
             {isUserActive ? (
-              <DropdownMenuItem className="text-white bg-red-500 justify-end">
-                <DialogTrigger className="cursor-pointer text-right ">
-                  غیر فعال کردن کاربر
-                </DialogTrigger>
+              <DropdownMenuItem onClick={openDialog} className="text-white bg-red-500 justify-end">
+                <div>غیر فعال کردن کاربر</div>
               </DropdownMenuItem>
             ) : (
-              <DropdownMenuItem className="bg-green-500 text-white">
-                <DialogTrigger className="cursor-pointer">فعال کردن کاربر</DialogTrigger>
+              <DropdownMenuItem onClick={openDialog} className="bg-green-500 text-white justify-end">
+                <div>فعال کردن کاربر</div>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem>
@@ -67,25 +63,12 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
         </DropdownMenu>
 
         <DialogContent>
-          <form>
-            <DialogHeader>
-              <DialogTitle className="text-center">
-                ردکردن عضویت کاربر {name} با شناسه کابری {id}
-              </DialogTitle>
-              <DialogDescription>
-                آیا مطمئن هستید که می‌خواهید عضویت این کاربر را رد کنید؟ این عمل قابل بازگشت نیست.
-              </DialogDescription>
-            </DialogHeader>
-
-            <DialogFooter>
-              <DialogClose>
-                <Button variant="outline">لفو</Button>
-              </DialogClose>
-              <Button type="submit" variant="destructive">
-                ردکردن
-              </Button>
-            </DialogFooter>
-          </form>
+          <DeActivateDialogForm
+            name={name}
+            id={id}
+            isActive={isUserActive}
+            onSuccess={() => setOpen(false)}
+          />
         </DialogContent>
       </Dialog>
     </div>
