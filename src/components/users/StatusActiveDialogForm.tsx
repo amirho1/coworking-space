@@ -19,7 +19,7 @@ interface Props {
 
 const initialState: DeactivateState = { error: null, success: false };
 
-export default function DeActivateDialogForm({ id, name, onSuccess, onError, isActive }: Props) {
+export default function StatusActiveDialogForm({ id, name, onSuccess, onError, isActive }: Props) {
   const [res, formAction, pending] = useActionState(userActiveStatus, initialState);
 
   useEffect(() => {

@@ -11,7 +11,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
 import { routes } from "@/lib/utils";
 import { Dialog, DialogContent } from "../ui/dialog";
-import DeActivateDialogForm from "./DeActivateDialogForm";
+import StatusActiveDialogForm from "./StatusActiveDialogForm";
 
 interface ActionsProps extends React.ComponentProps<typeof DropdownMenu> {
   id: number;
@@ -40,7 +40,10 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
                 <div>غیر فعال کردن کاربر</div>
               </DropdownMenuItem>
             ) : (
-              <DropdownMenuItem onClick={openDialog} className="bg-green-500 text-white justify-end">
+              <DropdownMenuItem
+                onClick={openDialog}
+                className="bg-green-500 text-white justify-end"
+              >
                 <div>فعال کردن کاربر</div>
               </DropdownMenuItem>
             )}
@@ -63,7 +66,7 @@ export default function Actions({ id, name, isUserActive, ...props }: ActionsPro
         </DropdownMenu>
 
         <DialogContent>
-          <DeActivateDialogForm
+          <StatusActiveDialogForm
             name={name}
             id={id}
             isActive={isUserActive}
