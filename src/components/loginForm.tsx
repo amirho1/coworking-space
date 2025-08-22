@@ -12,6 +12,7 @@ import { frontAPIs, routes, validatePhone } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import PasswordInput from "./PasswordInput";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,7 @@ export default function LoginForm() {
         const data = await res.json();
         if (data.success) {
           router.replace(routes.services);
-          toast.success("با موفقتی وارد شدید");
+          toast.success("با موفقیت وارد شدید");
         } else toast.error(data.error);
       })
 
@@ -73,7 +74,11 @@ export default function LoginForm() {
                     <FormItem>
                       <FormLabel>ایمیل یا موبایل</FormLabel>
                       <FormControl>
-                        <Input placeholder="example@example.com  / 09034532987" {...field} />
+                        <Input
+                          placeholder="example@example.com  / 09034532987"
+                          {...field}
+                          dir="ltr"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -87,7 +92,7 @@ export default function LoginForm() {
                     <FormItem>
                       <FormLabel>رمز عبور</FormLabel>
                       <FormControl>
-                        <Input type="password" {...field} />
+                        <PasswordInput {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

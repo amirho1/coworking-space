@@ -10,16 +10,24 @@ import {
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { ControllerRenderProps, FieldValues, useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { DatePicker } from "../ui/datePicker";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect, useRef } from "react";
+import {
+  HTMLInputTypeAttribute,
+  RefObject,
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+} from "react";
 import { register } from "@/app/register/registerAction";
 import { toast } from "sonner";
 import { imageFormats, registerFormSchema } from "@/lib/schemas/registerForm";
 import { format } from "date-fns-jalali";
+import PasswordInput from "../PasswordInput";
 
 interface RegisterFormProps {
   email?: string;
@@ -74,7 +82,15 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
     }
   }, [state, router]);
 
-  const fields = [
+  interface Field {
+    name: string;
+    label: string;
+    placeholder: string;
+    type: HTMLInputTypeAttribute;
+    ref?: RefObject<HTMLInputElement | null>;
+  }
+
+  const fields: Field[] = [
     {
       name: "name",
       label: "نام",
@@ -139,6 +155,42 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
     }
   }, []);
 
+  function renderInputFields(
+    { type, ...item }: Field,
+    field: ControllerRenderProps<FieldValues, string>
+  ) {
+    switch (type) {
+      case "file":
+        return (
+          <Input
+            type="file"
+            accept={imageFormats.join(",")}
+            onChange={e => field.onChange(e.target.files?.[0])}
+            onBlur={field.onBlur}
+            name={field.name}
+            ref={field.ref}
+          />
+        );
+
+      case "date":
+        return <DatePicker field={field} />;
+      case "password":
+        return <PasswordInput {...field} {...item} />;
+      default:
+        return (
+          <Input
+            placeholder={item.placeholder}
+            {...field}
+            type={type}
+            ref={e => {
+              if (field?.ref && typeof field?.ref === "function") field?.ref?.(e);
+              if (item.ref) item.ref.current = e;
+            }}
+          />
+        );
+    }
+  }
+
   return (
     <Card className="md:w-xl p-3 gap-2">
       <CardHeader>
@@ -150,37 +202,14 @@ export default function RegisterForm({ email = "", mobile = "" }: RegisterFormPr
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid grid-cols-1 md:grid-cols-2 gap-2"
           >
-            {fields.map(({ name, label, placeholder, type, ref }) => (
+            {fields.map(item => (
               <FormField
-                key={name}
-                name={name}
+                key={item.name}
+                name={item.name}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{label}</FormLabel>
-                    <FormControl>
-                      {type === "file" ? (
-                        <Input
-                          type="file"
-                          accept={imageFormats.join(",")}
-                          onChange={e => field.onChange(e.target.files?.[0])}
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          ref={field.ref}
-                        />
-                      ) : type === "date" ? (
-                        <DatePicker field={field} />
-                      ) : (
-                        <Input
-                          placeholder={placeholder}
-                          {...field}
-                          type={type}
-                          ref={e => {
-                            field.ref(e);
-                            if (ref) ref.current = e;
-                          }}
-                        />
-                      )}
-                    </FormControl>
+                    <FormLabel>{item.label}</FormLabel>
+                    <FormControl>{renderInputFields(item, field)}</FormControl>
                     <FormDescription />
                     <FormMessage />
                   </FormItem>
