@@ -15,6 +15,9 @@ const apiRoutes = {
   meetingRoomBook: "/meeting-room/book",
   users: "/identity/users/",
   personalBookings: "/meeting-room/bookings",
+  activeStatus(userId: string | number) {
+    return `identity/users/${userId}/active-status`;
+  },
 };
 
 export default apiRoutes;
